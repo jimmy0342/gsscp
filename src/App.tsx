@@ -7,6 +7,10 @@ import Layout from "./components/Layout";
 import Dashboard from "./components/Dashboard";
 import StudentProfile from "./components/StudentProfile";
 import AboutCollege from "./components/AboutCollege";
+import Performance from "./components/Performance";
+import Timetable from "./components/Timetable";
+import Notes from "./components/Notes";
+import Results from "./components/Results";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,10 +26,10 @@ const App = () => (
             <Route index element={<Dashboard />} />
             <Route path="profile" element={<StudentProfile />} />
             <Route path="about" element={<AboutCollege />} />
-            <Route path="performance" element={<div className="p-6"><h1 className="text-2xl font-bold">Performance - Coming Soon</h1></div>} />
-            <Route path="timetable" element={<div className="p-6"><h1 className="text-2xl font-bold">Timetable - Coming Soon</h1></div>} />
-            <Route path="notes" element={<div className="p-6"><h1 className="text-2xl font-bold">Notes - Coming Soon</h1></div>} />
-            <Route path="results" element={<div className="p-6"><h1 className="text-2xl font-bold">Results - Coming Soon</h1></div>} />
+            <Route path="performance" element={<Performance />} />
+            <Route path="timetable" element={<Timetable />} />
+            <Route path="notes" element={<Notes />} />
+            <Route path="results" element={<Results />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
