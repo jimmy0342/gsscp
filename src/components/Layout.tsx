@@ -8,18 +8,21 @@ import {
   Calendar, 
   BookOpen, 
   Trophy,
+  CalendarCheck,
+  CreditCard,
   Menu,
   X
 } from "lucide-react";
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: BarChart3 },
   { name: "Profile", href: "/profile", icon: User },
   { name: "About College", href: "/about", icon: GraduationCap },
   { name: "Performance", href: "/performance", icon: BarChart3 },
   { name: "Timetable", href: "/timetable", icon: Calendar },
   { name: "Notes", href: "/notes", icon: BookOpen },
   { name: "Results", href: "/results", icon: Trophy },
+  { name: "Attendance", href: "/attendance", icon: CalendarCheck },
+  { name: "Fee Collection", href: "/fee-collection", icon: CreditCard },
 ];
 
 export default function Layout() {

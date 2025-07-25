@@ -62,17 +62,11 @@ export default function StudentProfile() {
   return (
     <div className="p-6 space-y-8 animate-fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Student Profile
-          </h1>
-          <p className="text-muted-foreground">Manage your personal and academic information</p>
-        </div>
-        <Button variant="default">
-          <Edit className="mr-2 h-4 w-4" />
-          Edit Profile
-        </Button>
+      <div className="text-center space-y-2">
+        <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          Student Profile
+        </h1>
+        <p className="text-muted-foreground">View your personal and academic information</p>
       </div>
 
       {/* Profile Overview */}
