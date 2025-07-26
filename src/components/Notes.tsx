@@ -309,11 +309,13 @@ export default function Notes() {
                       <span>{note.size}</span>
                     </div>
                     
-                    <Badge variant="secondary" className="text-xs">
-                      {note.topic}
-                    </Badge>
+                    <div className="mb-3">
+                      <Badge variant="secondary" className="text-xs">
+                        {note.topic}
+                      </Badge>
+                    </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 pt-2">
                       <Button 
                         size="sm" 
                         variant="outline" 
