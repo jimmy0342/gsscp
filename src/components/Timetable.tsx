@@ -118,6 +118,15 @@ export default function Timetable() {
             Class Timetable
           </h1>
           <p className="text-muted-foreground">Weekly schedule for Class 12-A Science</p>
+          <div className="flex flex-col sm:flex-row gap-4 mt-2 text-sm">
+            <Badge variant="outline" className="w-fit">
+              <Clock className="h-3 w-3 mr-1" />
+              January 2025 - Week 3
+            </Badge>
+            <Badge variant="outline" className="w-fit">
+              School Hours: 09:00 AM - 03:30 PM
+            </Badge>
+          </div>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={handlePrint}>
