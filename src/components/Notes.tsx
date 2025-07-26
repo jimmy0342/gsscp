@@ -194,13 +194,173 @@ export default function Notes() {
   );
 
   const handleViewNote = (fileName: string) => {
-    // In a real app, this would open a PDF viewer
-    alert(`Opening ${fileName} in PDF viewer...`);
+    // Create a blob URL for the PDF content
+    const pdfContent = `%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/Resources <<
+/Font <<
+/F1 4 0 R
+>>
+>>
+/MediaBox [0 0 612 792]
+/Contents 5 0 R
+>>
+endobj
+
+4 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Times-Roman
+>>
+endobj
+
+5 0 obj
+<<
+/Length 44
+>>
+stream
+BT
+/F1 12 Tf
+72 720 Td
+(Study Notes: ${fileName}) Tj
+ET
+endstream
+endobj
+
+xref
+0 6
+0000000000 65535 f 
+0000000010 00000 n 
+0000000079 00000 n 
+0000000173 00000 n 
+0000000301 00000 n 
+0000000380 00000 n 
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+492
+%%EOF`;
+    
+    const blob = new Blob([pdfContent], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    
+    // Clean up the object URL after opening
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const handleDownloadNote = (fileName: string) => {
-    // In a real app, this would download the PDF file
-    alert(`Downloading ${fileName}...`);
+    // Create a simple PDF content for download
+    const pdfContent = `%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/Resources <<
+/Font <<
+/F1 4 0 R
+>>
+>>
+/MediaBox [0 0 612 792]
+/Contents 5 0 R
+>>
+endobj
+
+4 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Times-Roman
+>>
+endobj
+
+5 0 obj
+<<
+/Length 120
+>>
+stream
+BT
+/F1 16 Tf
+72 720 Td
+(Study Notes) Tj
+0 -20 Td
+/F1 12 Tf
+(File: ${fileName}) Tj
+0 -20 Td
+(Downloaded from Student Portal) Tj
+0 -20 Td
+(Date: ${new Date().toLocaleDateString()}) Tj
+ET
+endstream
+endobj
+
+xref
+0 6
+0000000000 65535 f 
+0000000010 00000 n 
+0000000079 00000 n 
+0000000173 00000 n 
+0000000301 00000 n 
+0000000380 00000 n 
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+568
+%%EOF`;
+    
+    const blob = new Blob([pdfContent], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    
+    // Create download link
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Clean up the object URL
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const totalNotes = Object.values(notesData).reduce((total, subjectNotes) => total + subjectNotes.length, 0);

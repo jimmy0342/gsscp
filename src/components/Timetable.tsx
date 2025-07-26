@@ -105,8 +105,99 @@ export default function Timetable() {
   };
 
   const handleDownload = () => {
-    // In a real app, this would generate and download a PDF
-    alert("PDF download feature would be implemented here!");
+    // Generate a simple PDF for the timetable
+    const pdfContent = `%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/Resources <<
+/Font <<
+/F1 4 0 R
+>>
+>>
+/MediaBox [0 0 612 792]
+/Contents 5 0 R
+>>
+endobj
+
+4 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Times-Roman
+>>
+endobj
+
+5 0 obj
+<<
+/Length 200
+>>
+stream
+BT
+/F1 18 Tf
+72 720 Td
+(Class Timetable - 12-A Science) Tj
+0 -30 Td
+/F1 12 Tf
+(January 2025 - Week 3) Tj
+0 -20 Td
+(School Hours: 09:00 AM - 03:30 PM) Tj
+0 -30 Td
+(Monday to Saturday Schedule) Tj
+0 -20 Td
+(Downloaded from Student Portal) Tj
+0 -20 Td
+(Date: ${new Date().toLocaleDateString()}) Tj
+ET
+endstream
+endobj
+
+xref
+0 6
+0000000000 65535 f 
+0000000010 00000 n 
+0000000079 00000 n 
+0000000173 00000 n 
+0000000301 00000 n 
+0000000380 00000 n 
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+648
+%%EOF`;
+    
+    const blob = new Blob([pdfContent], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    
+    // Create download link
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'class-timetable.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Clean up the object URL
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   return (
