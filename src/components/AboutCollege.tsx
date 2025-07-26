@@ -292,7 +292,7 @@ export default function AboutCollege() {
               <ExternalLink className="mr-2 h-5 w-5" />
               Visit Website
             </Button>
-            <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
+            <Button variant="outline" size="lg" className="border-white text-white">
               <Mail className="mr-2 h-5 w-5" />
               Contact Admissions
             </Button>
