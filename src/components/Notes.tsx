@@ -283,7 +283,7 @@ export default function Notes() {
 
       {/* Notes Content */}
       <Tabs value={selectedSubject} onValueChange={setSelectedSubject}>
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6">
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-6">
           {subjects.map((subject) => (
             <TabsTrigger key={subject} value={subject} className="text-xs">
               {subject.replace(" Science", "").replace("Computer", "CS")}
@@ -292,7 +292,7 @@ export default function Notes() {
         </TabsList>
 
         {subjects.map((subject) => (
-          <TabsContent key={subject} value={subject} className="space-y-4">
+          <TabsContent key={subject} value={subject} className="space-y-4 mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredNotes.map((note, index) => (
                 <Card key={index} className="bg-card/80 backdrop-blur-sm border shadow-card hover:shadow-elegant transition-all duration-300 hover-scale">
