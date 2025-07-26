@@ -8,8 +8,8 @@ import { Trophy, TrendingUp, Download, Printer, Medal, Star } from "lucide-react
 
 const examResults = {
   "midterm-2024": {
-    examName: "Mid-Term Examination 2024",
-    examDate: "March 2024",
+    examName: "First Term/Monthly Test  Examination 2025",
+    examDate: "April 2025",
     results: [
       { subject: "Mathematics", obtained: 92, total: 100, grade: "A+", remarks: "Excellent" },
       { subject: "Physics", obtained: 85, total: 100, grade: "A", remarks: "Very Good" },
@@ -26,8 +26,8 @@ const examResults = {
     outOf: 120
   },
   "final-2023": {
-    examName: "Final Examination 2023",
-    examDate: "December 2023",
+    examName: "Mid-Term Examination 2025",
+    examDate: "September 2025",
     results: [
       { subject: "Mathematics", obtained: 89, total: 100, grade: "A", remarks: "Very Good" },
       { subject: "Physics", obtained: 82, total: 100, grade: "A", remarks: "Good" },
@@ -44,8 +44,8 @@ const examResults = {
     outOf: 118
   },
   "midterm-2023": {
-    examName: "Mid-Term Examination 2023",
-    examDate: "September 2023",
+    examName: "Final-Term Examination 2025",
+    examDate: "September   2025",
     results: [
       { subject: "Mathematics", obtained: 86, total: 100, grade: "A", remarks: "Very Good" },
       { subject: "Physics", obtained: 79, total: 100, grade: "B+", remarks: "Good" },
