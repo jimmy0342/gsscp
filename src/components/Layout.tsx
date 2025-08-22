@@ -10,8 +10,10 @@ import {
   Trophy,
   CalendarCheck,
   CreditCard,
+  Brain,
   Menu,
-  X
+  X,
+  Bell
 } from "lucide-react";
 
 const navigation = [
@@ -23,6 +25,8 @@ const navigation = [
   { name: "Results", href: "/results", icon: Trophy },
   { name: "Attendance", href: "/attendance", icon: CalendarCheck },
   { name: "Fee Collection", href: "/fee-collection", icon: CreditCard },
+  { name: "AI Chat", href: "/ai-chat", icon: Brain },
+  { name: "Notifications", href: "/notifications", icon: Bell },
 ];
 
 export default function Layout() {
@@ -37,7 +41,7 @@ export default function Layout() {
         <div className="fixed left-0 top-0 h-full w-64 bg-card shadow-elegant">
           <div className="flex h-16 items-center justify-between px-4 border-b">
             <span className="text-lg font-semibold bg-gradient-primary bg-clip-text text-transparent">
-              EduPortfolio
+              AI-Powered Edu
             </span>
             <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
               <X className="h-5 w-5" />
@@ -71,7 +75,7 @@ export default function Layout() {
         <div className="flex flex-col flex-grow bg-card border-r shadow-card">
           <div className="flex h-16 items-center px-4 border-b">
             <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              EduPortfolio
+              AI-Powered Edu
             </span>
           </div>
           <nav className="mt-6 flex-1 px-4">
@@ -112,7 +116,7 @@ export default function Layout() {
               </Button>
               <div className="flex items-center gap-4">
                 <div className="text-sm text-muted-foreground">
-                  Welcome back, Student!
+                  Welcome back, Sarah Johnson !
                 </div>
               </div>
             </div>

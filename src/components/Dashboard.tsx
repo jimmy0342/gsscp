@@ -9,7 +9,8 @@ import {
   Trophy,
   TrendingUp,
   Clock,
-  Star
+  Star,
+  Brain
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-education.jpg";
@@ -37,11 +38,11 @@ const quickStats = [
     color: "text-primary"
   },
   {
-    title: "Rank",
-    value: "#3",
-    change: "↑ 2 positions",
-    icon: TrendingUp,
-    color: "text-accent"
+    title: "AI Sessions",
+    value: "8",
+    change: "This week",
+    icon: Brain,
+    color: "text-primary"
   }
 ];
 
@@ -73,6 +74,13 @@ const quickActions = [
     icon: BookOpen,
     href: "/notes",
     variant: "hero" as const
+  },
+  {
+    title: "AI Study Assistant",
+    description: "Get help with AI-powered tutoring",
+    icon: Brain,
+    href: "/ai-chat",
+    variant: "default" as const
   }
 ];
 

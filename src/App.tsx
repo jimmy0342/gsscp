@@ -12,6 +12,8 @@ import Notes from "./components/Notes";
 import Results from "./components/Results";
 import Attendance from "./components/Attendance";
 import FeeCollection from "./components/FeeCollection";
+import AIChat from "./components/AIChat";
+import Notifications from "./components/Notifications";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +35,8 @@ const App = () => (
             <Route path="results" element={<Results />} />
             <Route path="attendance" element={<Attendance />} />
             <Route path="fee-collection" element={<FeeCollection />} />
+            <Route path="ai-chat" element={<AIChat />} />
+            <Route path="notifications" element={<Notifications />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

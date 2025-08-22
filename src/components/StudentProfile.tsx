@@ -11,7 +11,10 @@ import {
   Heart,
   Edit,
   IdCard,
-  GraduationCap
+  GraduationCap,
+  Bell,
+  MessageSquare,
+  AlertCircle
 } from "lucide-react";
 import studentProfile from "@/assets/student-profile.jpg";
 
@@ -23,14 +26,14 @@ const studentData = {
   rollNumber: "15",
   profileImage: studentProfile,
   dateOfBirth: "2006-03-15",
-  gender: "Female",
+  gender: "Male",
   bloodGroup: "A+",
   contactNumber: "+1 (555) 123-4567",
   email: "sarah.johnson@school.edu",
   address: "123 Oak Street, Springfield, IL 62701",
   guardianName: "Michael Johnson",
   emergencyContact: "+1 (555) 987-6543",
-  enrollmentYear: "2020",
+  enrollmentYear: "2025",
   admissionNumber: "ADM2020150",
   status: "Active"
 };
@@ -56,6 +59,68 @@ const academicInfo = [
 const guardianInfo = [
   { label: "Guardian Name", value: studentData.guardianName, icon: User },
   { label: "Emergency Contact", value: studentData.emergencyContact, icon: Phone }
+];
+
+const teacherAdvice = [
+  {
+    id: 1,
+    teacher: "Mrs. Anderson",
+    subject: "Mathematics",
+    advice: "Focus on practicing quadratic equations. Your problem-solving skills are improving!",
+    date: "2025-01-15",
+    priority: "high"
+  },
+  {
+    id: 2,
+    teacher: "Mr. Rodriguez",
+    subject: "Physics",
+    advice: "Great work on the lab report! Consider joining the Science Club to enhance your practical skills.",
+    date: "2025-01-12",
+    priority: "medium"
+  },
+  {
+    id: 3,
+    teacher: "Ms. Thompson",
+    subject: "English Literature",
+    advice: "Your essay writing has shown remarkable improvement. Keep up the creative thinking!",
+    date: "2025-01-10",
+    priority: "low"
+  }
+];
+
+const schoolNotifications = [
+  {
+    id: 1,
+    title: "Fee Payment Reminder",
+    message: "Second semester fees are due by January 31st, 2025. Please ensure timely payment.",
+    date: "2025-01-15",
+    type: "payment",
+    urgent: true
+  },
+  {
+    id: 2,
+    title: "Parent-Teacher Meeting",
+    message: "Annual Parent-Teacher meeting scheduled for February 5th, 2025 at 2:00 PM.",
+    date: "2025-01-14",
+    type: "meeting",
+    urgent: false
+  },
+  {
+    id: 3,
+    title: "Sports Day Event",
+    message: "Annual Sports Day will be held on February 15th, 2025. Registration forms available at the office.",
+    date: "2025-01-13",
+    type: "event",
+    urgent: false
+  },
+  {
+    id: 4,
+    title: "Library Book Return",
+    message: "Please return all borrowed library books by January 25th, 2025 for annual inventory.",
+    date: "2025-01-12",
+    type: "reminder",
+    urgent: false
+  }
 ];
 
 export default function StudentProfile() {
@@ -103,11 +168,11 @@ export default function StudentProfile() {
                 Enrolled since {studentData.enrollmentYear} • Admission No. {studentData.admissionNumber}
               </p>
               <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                <Button variant="default" size="sm">
+                <Button variant="default" size="sm" onClick={() => { window.location.href = 'tel:+15559876543'; }}>
                   <Phone className="mr-2 h-4 w-4" />
                   Call
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={() => { window.location.href = 'mailto:SarahJohnsonStudIDSTU2024001@gmail.com'; }}>
                   <Mail className="mr-2 h-4 w-4" />
                   Email
                 </Button>
