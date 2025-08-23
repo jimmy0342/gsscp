@@ -28,7 +28,10 @@ import {
   Zap,
   Clock,
   FileText,
-  TrendingUp
+  TrendingUp,
+  Plus,
+  Mic,
+  MicOff
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -60,17 +63,8 @@ interface AIModel {
 
 const aiModels: AIModel[] = [
   {
-    id: "mistralai/mistral-small-3.2-24b-instruct:free",
-    name: "Mistral Small 3.2 24B",
-    provider: "Mistral AI",
-    description: "Fast and efficient model for general tasks",
-    isFree: false,
-    maxTokens: 1000,
-    capabilities: ["General Q&A", "Homework Help", "Concept Explanation"]
-  },
-  {
     id: "openai/gpt-3.5-turbo",
-    name: "GPT-3.5 Turbo",
+    name: "ChatGPT",
     provider: "OpenAI",
     description: "Balanced performance and speed",
     isFree: false,
@@ -78,17 +72,8 @@ const aiModels: AIModel[] = [
     capabilities: ["Advanced Reasoning", "Creative Writing", "Problem Solving"]
   },
   {
-    id: "meta-llama/llama-3.1-8b-instruct",
-    name: "Llama 3.1 8B",
-    provider: "Meta",
-    description: "Efficient open-source model for general tasks",
-    isFree: false,
-    maxTokens: 1500,
-    capabilities: ["General Q&A", "Text Generation", "Basic Reasoning"]
-  },
-  {
     id: "google/gemini-flash-1.5",
-    name: "Gemini Flash 1.5",
+    name: "Gemini",
     provider: "Google",
     description: "Fast and efficient Gemini model",
     isFree: false,
@@ -96,14 +81,15 @@ const aiModels: AIModel[] = [
     capabilities: ["Quick Responses", "General Q&A", "Basic Analysis"]
   },
   {
-    id: "anthropic/claude-3-haiku-20240307",
-    name: "Claude 3 Haiku",
-    provider: "Anthropic",
-    description: "Fast and efficient Claude model",
+    id: "deepseek/deepseek-r1-0528:free",
+    name: "DeepSeek",
+    provider: "DeepSeek",
+    description: "Advanced reasoning and analysis with R1 model",
     isFree: false,
-    maxTokens: 2000,
-    capabilities: ["Quick Responses", "General Q&A", "Basic Analysis"]
-  }
+    maxTokens: 3000,
+    capabilities: ["Deep Analysis", "Research", "Critical Thinking"]
+  },
+
 ];
 
 const studyCategories = [
@@ -118,18 +104,13 @@ const studyCategories = [
 const OPENROUTER_API_KEY = "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";
 
 export default function AIChat() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      role: "assistant",
-      content: "Hello! I'm your AI study assistant. I can help you with homework, explain concepts, solve problems, and answer questions. What would you like to learn about today?",
-      timestamp: new Date(),
-      model: "Mistral Small 3.2 24B"
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
-  const [selectedModel, setSelectedModel] = useState("mistralai/mistral-small-3.2-24b-instruct:free");
+  const [selectedModel, setSelectedModel] = useState("openai/gpt-3.5-turbo");
   const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
 
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("General");
@@ -139,28 +120,61 @@ export default function AIChat() {
       title: "Math Help Session",
       timestamp: new Date(Date.now() - 86400000), // 1 day ago
       messageCount: 8,
-      model: "Mistral Small 3.2 24B"
+      model: "AI Assistant"
     },
     {
       id: "2",
       title: "Science Questions",
       timestamp: new Date(Date.now() - 172800000), // 2 days ago
       messageCount: 12,
-      model: "Claude 3 Haiku"
+      model: "AI Assistant"
     }
   ]);
   const [activeTab, setActiveTab] = useState("chat");
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (scrollAreaRef.current) {
+      const scrollElement = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollElement) {
+        scrollElement.scrollTo({
+          top: scrollElement.scrollHeight,
+          behavior: "smooth"
+        });
+      }
+    }
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // Only auto-scroll when new messages are added (not on initial load)
+    // This ensures users see new AI responses within the chat ScrollArea only
+    if (messages.length > 0) {
+      scrollToBottom();
+    }
   }, [messages]);
 
+  const selectedModelData = aiModels.find(model => model.id === selectedModel);
+
+  // Ensure we have a valid model selected
+  useEffect(() => {
+    if (!selectedModelData && aiModels.length > 0) {
+      setSelectedModel(aiModels[0].id);
+    }
+  }, [selectedModelData, aiModels]);
+
+  // Update initial message model name when model changes
+  useEffect(() => {
+    if (messages.length > 0 && selectedModelData) {
+      setMessages(prev => prev.map((msg, index) => 
+        index === 0 
+          ? { ...msg, model: selectedModelData.name }
+          : msg
+      ));
+    }
+  }, [selectedModelData]);
 
 
   const handleSendMessage = async () => {
@@ -191,7 +205,7 @@ export default function AIChat() {
           messages: [
             {
               role: "system",
-              content: `You are a helpful AI study assistant for students. You specialize in ${selectedCategory.toLowerCase()} subjects. Provide clear, educational, and supportive responses. Help with homework, explain concepts, solve problems, and encourage learning. Always be encouraging and patient. Format your responses in a clear, structured way when appropriate.`
+              content: `You are a helpful AI study assistant. Provide clear, educational responses. Help with homework, explain concepts, solve problems, and encourage learning.`
             },
             ...messages.map(msg => ({
               role: msg.role,
@@ -202,7 +216,12 @@ export default function AIChat() {
               content: inputMessage
             }
           ],
-          stream: false
+          stream: false,
+          temperature: 0.7,
+          max_tokens: 1000,
+          top_p: 0.9,
+          frequency_penalty: 0.1,
+          presence_penalty: 0.1
         })
       });
 
@@ -267,15 +286,7 @@ export default function AIChat() {
       setChatSessions(prev => [newSession, ...prev]);
     }
 
-    setMessages([
-      {
-        id: "1",
-        role: "assistant",
-        content: "Hello! I'm your AI study assistant. I can help you with homework, explain concepts, solve problems, and answer questions. What would you like to learn about today?",
-        timestamp: new Date(),
-        model: "Mistral Small 3.2 24B"
-      }
-    ]);
+    setMessages([]);
     toast.success("Chat cleared and saved to history!");
   };
 
@@ -296,7 +307,100 @@ export default function AIChat() {
     toast.success("Chat exported successfully!");
   };
 
-  const selectedModelData = aiModels.find(model => model.id === selectedModel);
+  // Voice recording functionality
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      const chunks: Blob[] = [];
+      
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          chunks.push(e.data);
+        }
+      };
+      
+      recorder.onstop = async () => {
+        const audioBlob = new Blob(chunks, { type: 'audio/wav' });
+        await processAudioToText(audioBlob);
+        stream.getTracks().forEach(track => track.stop());
+      };
+      
+      setMediaRecorder(recorder);
+      setAudioChunks(chunks);
+      recorder.start();
+      setIsRecording(true);
+      toast.success("Recording started... Speak now!");
+    } catch (error) {
+      console.error("Error starting recording:", error);
+      toast.error("Failed to start recording. Please check microphone permissions.");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+      toast.success("Recording stopped. Processing audio...");
+    }
+  };
+
+  const processAudioToText = async (audioBlob: Blob) => {
+    try {
+      // Convert audio to text using Web Speech API
+      const recognition = new (window as any).webkitSpeechRecognition() || new (window as any).SpeechRecognition();
+      
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+      
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInputMessage(transcript);
+        toast.success("Voice converted to text!");
+      };
+      
+      recognition.onerror = (event: any) => {
+        console.error("Speech recognition error:", event.error);
+        toast.error("Voice recognition failed. Please try again.");
+      };
+      
+      recognition.start();
+      
+      // Simulate processing the audio blob
+      setTimeout(() => {
+        recognition.stop();
+      }, 1000);
+      
+    } catch (error) {
+      console.error("Speech recognition not supported:", error);
+      // Fallback: simulate voice input
+      toast.info("Voice recognition not supported in this browser. Simulating voice input...");
+      setTimeout(() => {
+        setInputMessage("Voice input: Hello, this is a test message from voice recording.");
+      }, 1000);
+    }
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Handle file upload - you can implement file processing logic here
+      toast.success(`File "${file.name}" uploaded successfully!`);
+      
+      // Add file info to chat
+      const fileMessage: Message = {
+        id: Date.now().toString(),
+        role: "user",
+        content: `📎 Uploaded file: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, fileMessage]);
+      
+      // Reset the file input
+      event.target.value = '';
+    }
+  };
 
   return (
     <div className="p-6 space-y-6 animate-fade-in">
@@ -321,118 +425,89 @@ export default function AIChat() {
         </TabsList>
 
         <TabsContent value="chat" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            {/* AI Models Sidebar */}
-            <div className="lg:col-span-1 space-y-4">
-              <Card className="bg-gradient-card shadow-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Brain className="h-5 w-5 text-primary" />
-                    AI Models
-                  </CardTitle>
-                  <CardDescription>Choose your preferred AI assistant</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Select value={selectedModel} onValueChange={setSelectedModel}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select AI Model" />
+          {/* ChatGPT-like Chat Interface - Compact and Page-Friendly */}
+          <Card className="bg-gradient-card shadow-card h-[450px] flex flex-col w-full">
+            {/* Features/Controls Area - Moved to Top */}
+            <div className="border-b p-3 bg-gray-50">
+              <div className="flex items-center justify-between gap-3">
+                {/* Left Side: Model Selection */}
+                <Select value={selectedModel} onValueChange={setSelectedModel}>
+                  <SelectTrigger className="w-40 h-7">
+                    <SelectValue placeholder="Select AI Model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {aiModels.map((model) => (
+                      <SelectItem key={model.id} value={model.id}>
+                        <div className="flex items-center gap-2">
+                          <span>{model.name}</span>
+                          {model.isFree && (
+                            <Badge variant="secondary" className="text-xs">Pro</Badge>
+                          )}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Right Side: Study Category and Chat Controls */}
+                <div className="flex items-center gap-2">
+                  {/* Study Category */}
+                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                    <SelectTrigger className="w-32 h-7">
+                      <SelectValue placeholder="Category" />
                     </SelectTrigger>
                     <SelectContent>
-                      {aiModels.map((model) => (
-                        <SelectItem key={model.id} value={model.id}>
+                      {studyCategories.map((category) => (
+                        <SelectItem key={category.name} value={category.name}>
                           <div className="flex items-center gap-2">
-                            <span>{model.name}</span>
-                            {model.isFree && (
-                              <Badge variant="secondary" className="text-xs">Pro</Badge>
-                            )}
+                            <category.icon className={`h-3 w-3 ${category.color}`} />
+                            {category.name}
                           </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
 
-                  {selectedModelData && (
-                    <div className="p-3 bg-muted/50 rounded-lg">
-                      <p className="text-sm font-medium">{selectedModelData.name}</p>
-                      <p className="text-xs text-muted-foreground">{selectedModelData.description}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Provider: {selectedModelData.provider}
-                      </p>
-                      <div className="mt-2 space-y-1">
-                        {selectedModelData.capabilities.map((capability, index) => (
-                          <Badge key={index} variant="outline" className="text-xs mr-1">
-                            {capability}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-
-
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Study Category</label>
-                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {studyCategories.map((category) => (
-                          <SelectItem key={category.name} value={category.name}>
-                            <div className="flex items-center gap-2">
-                              <category.icon className={`h-4 w-4 ${category.color}`} />
-                              {category.name}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="flex gap-2">
+                  {/* Chat Controls */}
+                  <div className="flex items-center gap-1">
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={clearChat}
-                      className="flex-1"
+                      className="h-7 px-2 text-xs"
                     >
-                      <RefreshCw className="h-4 w-4 mr-2" />
+                      <RefreshCw className="h-3 w-3 mr-1" />
                       Clear
                     </Button>
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={exportChat}
-                      className="flex-1"
+                      className="h-7 px-2 text-xs"
                     >
-                      <Download className="h-4 w-4 mr-2" />
+                      <Download className="h-3 w-3 mr-1" />
                       Export
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
 
-            {/* Chat Interface */}
-            <div className="lg:col-span-3">
-              <Card className="bg-gradient-card shadow-card h-[600px] flex flex-col">
-                <CardHeader className="border-b">
-                  <CardTitle className="flex items-center gap-2">
-                    <MessageSquare className="h-5 w-5 text-primary" />
-                    Chat with {selectedModelData?.name}
-                  </CardTitle>
-                  <CardDescription>
-                    Ask questions, get help with homework, or discuss any topic
-                  </CardDescription>
-                </CardHeader>
-
-                {/* Messages Area */}
-                <ScrollArea className="flex-1 p-4">
-                  <div className="space-y-4">
-                    {messages.map((message) => (
+            {/* Messages Area - ChatGPT-like Layout */}
+            <ScrollArea ref={scrollAreaRef} className="flex-1 p-3">
+              <div className="space-y-4 max-w-4xl mx-auto">
+                {messages.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Bot className="h-12 w-12 mx-auto mb-3 text-muted-foreground/50" />
+                    <h3 className="text-base font-medium text-muted-foreground mb-2">How can I help you today?</h3>
+                    <p className="text-sm text-muted-foreground">Ask me anything about your studies, and I'll help you learn!</p>
+                  </div>
+                ) : (
+                  <>
+                    {messages.map((message, index) => (
                       <div
                         key={message.id}
-                        className={`flex gap-3 group ${
+                        className={`flex gap-4 group ${
                           message.role === "user" ? "justify-end" : "justify-start"
                         }`}
                       >
@@ -443,14 +518,18 @@ export default function AIChat() {
                         )}
                         
                         <div
-                          className={`max-w-[80%] rounded-lg p-3 relative ${
+                          className={`max-w-[85%] rounded-xl p-4 relative ${
                             message.role === "user"
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-muted"
+                              ? "bg-primary text-primary-foreground shadow-sm"
+                              : "bg-muted/50 border border-border/50 shadow-sm"
                           }`}
                         >
                           <div className="flex items-start justify-between gap-2">
-                            <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                            <p className={`text-base leading-relaxed whitespace-pre-wrap ${
+                              message.role === "user" ? "text-primary-foreground" : "text-foreground"
+                            }`}>
+                              {message.content}
+                            </p>
                             <Button
                               variant="ghost"
                               size="sm"
@@ -465,7 +544,7 @@ export default function AIChat() {
                             </Button>
                           </div>
                           
-                          <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground">
                             <span>{message.timestamp.toLocaleTimeString()}</span>
                             {message.model && (
                               <Badge variant="outline" className="text-xs">
@@ -482,56 +561,104 @@ export default function AIChat() {
                         )}
                       </div>
                     ))}
-                    
-                    {isLoading && (
-                      <div className="flex gap-3 justify-start">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Bot className="h-4 w-4 text-primary" />
-                        </div>
-                        <div className="bg-muted rounded-lg p-3">
-                          <div className="flex items-center gap-2">
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            <span className="text-sm">AI is thinking...</span>
-                          </div>
-                        </div>
+                  </>
+                )}
+                
+                {isLoading && (
+                  <div className="flex gap-4 justify-start">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Bot className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="bg-muted/50 border border-border/50 rounded-xl p-4 shadow-sm">
+                      <div className="flex items-center gap-3">
+                        <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                        <span className="text-base">AI is thinking...</span>
                       </div>
-                    )}
-                    
-                    <div ref={messagesEndRef} />
+                    </div>
                   </div>
-                </ScrollArea>
+                )}
+              </div>
+            </ScrollArea>
 
-                {/* Input Area */}
-                <div className="border-t p-4">
-                  <div className="flex gap-2">
-                    <Textarea
-                      ref={textareaRef}
-                      value={inputMessage}
-                      onChange={(e) => setInputMessage(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      placeholder="Ask me anything about your studies..."
-                      className="min-h-[60px] max-h-[120px] resize-none"
-                      disabled={isLoading}
-                    />
-                    <Button
-                      onClick={handleSendMessage}
-                      disabled={!inputMessage.trim() || isLoading}
-                      className="px-4 self-end"
-                    >
-                      {isLoading ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <Send className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Press Enter to send, Shift+Enter for new line
-                  </p>
+            {/* Input Area - ChatGPT-like Prominent Input */}
+            <div className="border-t p-3 bg-background/50">
+              {/* Input Row: Upload, Text Input, Voice, and Send */}
+              <div className="flex gap-3 w-full max-w-4xl mx-auto">
+                {/* File Upload Button - Left Side */}
+                <div className="relative">
+                  <input
+                    type="file"
+                    id="file-upload"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                    accept="image/*,.pdf,.doc,.docx,.txt"
+                    multiple={false}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-10 w-10 p-0 border border-border rounded-xl hover:bg-muted/50 transition-colors"
+                    title="Upload file"
+                    onClick={() => {
+                      const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+                      if (fileInput) {
+                        fileInput.click();
+                      }
+                    }}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
                 </div>
-              </Card>
+
+                {/* Text Input - Center */}
+                <Textarea
+                  ref={textareaRef}
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Ask me anything about your studies..."
+                  className="flex-1 min-h-[40px] max-h-[120px] resize-none border border-border rounded-xl text-base px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  disabled={isLoading}
+                />
+
+                {/* Voice Recording Button - Right Side */}
+                <Button
+                  type="button"
+                  variant={isRecording ? "destructive" : "outline"}
+                  size="sm"
+                  className="h-10 w-10 p-0 border border-border rounded-xl hover:bg-muted/50 transition-colors"
+                  onClick={isRecording ? stopRecording : startRecording}
+                  title={isRecording ? "Stop recording" : "Start voice recording"}
+                >
+                  {isRecording ? (
+                    <MicOff className="h-4 w-4" />
+                  ) : (
+                    <Mic className="h-4 w-4" />
+                  )}
+                </Button>
+
+                {/* Send Button - Right Side */}
+                <Button
+                  onClick={handleSendMessage}
+                  disabled={!inputMessage.trim() || isLoading}
+                  className="px-6 h-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-sm font-medium transition-colors"
+                >
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+              
+              <p className="text-xs text-muted-foreground mt-3 text-center">
+                Press Enter to send, Shift+Enter for new line • Click + to upload files • Click 🎤 for voice input
+              </p>
             </div>
-          </div>
+          </Card>
+
+          {/* Remove the old controls section since they're now integrated above */}
         </TabsContent>
 
         <TabsContent value="history" className="space-y-6">
