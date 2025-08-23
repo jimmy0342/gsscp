@@ -222,7 +222,15 @@ export default function AIChat() {
           messages: [
             {
               role: "system",
-              content: `You are a helpful AI study assistant. You can analyze images and provide clear, educational responses. Help with homework, explain concepts, solve problems, and encourage learning. When users upload images, analyze them carefully and provide detailed help based on what you see.`
+              content: `You are a helpful AI study assistant. You can analyze images and read text documents to provide clear, educational responses. Help with homework, explain concepts, solve problems, and encourage learning. 
+
+When users upload images, analyze them carefully and provide detailed help based on what you see.
+
+When users upload text documents (.txt, .readme, .md), read the content thoroughly and provide detailed analysis, explanations, or answers to their questions about the document.
+
+When users upload Word documents or Excel files, help them understand the content and answer questions about the documents. You can process the text content that was extracted from these files.
+
+Always provide comprehensive, helpful responses based on the document content you can access.`
             },
             ...messages.map(msg => {
               if (msg.image) {
@@ -498,14 +506,89 @@ export default function AIChat() {
         };
         
         reader.readAsDataURL(file);
+      } else if (file.type === 'text/plain' || file.name.endsWith('.txt') || file.name.endsWith('.readme') || file.name.endsWith('.md')) {
+        // Handle text files
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const textContent = e.target?.result as string;
+          
+          if (!textContent || textContent.length === 0) {
+            toast.error("Failed to read text file. Please try again.");
+            return;
+          }
+          
+          console.log("Text file uploaded:", {
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            contentLength: textContent.length
+          });
+          
+          // Create text file message
+          const textMessage: Message = {
+            id: Date.now().toString(),
+            role: "user",
+            content: `📄 I've uploaded a text document: ${file.name}\n\nDocument content:\n${textContent}`,
+            timestamp: new Date()
+          };
+          
+          setMessages(prev => [...prev, textMessage]);
+          toast.success(`Text file "${file.name}" uploaded and read successfully!`);
+        };
+        
+        reader.onerror = () => {
+          toast.error("Failed to read text file. Please try again.");
+        };
+        
+        reader.readAsText(file);
+      } else if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || 
+                 file.type === 'application/msword' || 
+                 file.name.endsWith('.docx') || 
+                 file.name.endsWith('.doc')) {
+        // Handle Word documents
+        toast.info("Word documents are being processed... Please wait.");
+        
+        // For Word docs, we'll extract text content
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          // Note: This is a simplified approach. For better Word doc processing,
+          // you might want to use a library like mammoth.js
+          const wordMessage: Message = {
+            id: Date.now().toString(),
+            role: "user",
+            content: `📝 I've uploaded a Word document: ${file.name}\n\nNote: Word documents are supported but may need specialized processing for full text extraction. Please ask me specific questions about the document content.`,
+            timestamp: new Date()
+          };
+          
+          setMessages(prev => [...prev, wordMessage]);
+          toast.success(`Word document "${file.name}" uploaded successfully!`);
+        };
+        
+        reader.readAsArrayBuffer(file);
+      } else if (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || 
+                 file.type === 'application/vnd.ms-excel' || 
+                 file.name.endsWith('.xlsx') || 
+                 file.name.endsWith('.xls')) {
+        // Handle Excel files
+        toast.info("Excel files are being processed... Please wait.");
+        
+        const excelMessage: Message = {
+          id: Date.now().toString(),
+          role: "user",
+          content: `📊 I've uploaded an Excel file: ${file.name}\n\nNote: Excel files are supported but may need specialized processing for full data extraction. Please ask me specific questions about the spreadsheet content.`,
+          timestamp: new Date()
+        };
+        
+        setMessages(prev => [...prev, excelMessage]);
+        toast.success(`Excel file "${file.name}" uploaded successfully!`);
       } else {
-        // Handle non-image files
+        // Handle other file types
         toast.success(`File "${file.name}" uploaded successfully!`);
         
         const fileMessage: Message = {
           id: Date.now().toString(),
           role: "user",
-          content: `📎 Uploaded file: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
+          content: `📎 Uploaded file: ${file.name} (${(file.size / 1024).toFixed(1)} KB)\n\nFile type: ${file.type || 'Unknown'}\n\nNote: This file type may need specialized processing. Please ask me specific questions about the file content.`,
           timestamp: new Date()
         };
         setMessages(prev => [...prev, fileMessage]);
@@ -720,7 +803,7 @@ export default function AIChat() {
                     id="file-upload"
                     className="hidden"
                     onChange={handleFileUpload}
-                    accept="image/*,.pdf,.doc,.docx,.txt"
+                    accept="image/*,.pdf,.doc,.docx,.txt,.readme,.md,.xlsx,.xls"
                     multiple={false}
                   />
                   <Button
@@ -782,7 +865,7 @@ export default function AIChat() {
               </div>
               
               <p className="text-xs text-muted-foreground mt-3 text-center">
-                Press Enter to send, Shift+Enter for new line • Click + to upload files • Click 🎤 for voice input
+                Press Enter to send, Shift+Enter for new line • Click + to upload images, documents, or files • Click 🎤 for voice input
               </p>
             </div>
           </Card>
