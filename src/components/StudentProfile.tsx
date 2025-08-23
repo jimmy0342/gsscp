@@ -259,6 +259,36 @@ export default function StudentProfile() {
               </div>
             ))}
           </div>
+          
+          {/* Guardian Profile Section */}
+          <div className="mt-6 p-4 rounded-lg bg-muted/30 border border-accent/20">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+                  alt="Michael Johnson"
+                  className="w-20 h-20 rounded-full object-cover border-4 border-accent/20 shadow-lg"
+                />
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
+                  <Users className="h-3 w-3 text-white" />
+                </div>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-foreground">Michael Johnson</h3>
+                <p className="text-sm text-muted-foreground">Primary Guardian</p>
+                <div className="flex items-center gap-4 mt-2">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Phone className="h-4 w-4" />
+                    <span>+1 (555) 987-6543</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Mail className="h-4 w-4" />
+                    <span>michael.johnson@email.com</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
