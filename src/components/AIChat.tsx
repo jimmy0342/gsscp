@@ -41,6 +41,8 @@ interface Message {
   content: string;
   timestamp: Date;
   model?: string;
+  image?: string; // Base64 encoded image
+  imageDescription?: string; // Description of the image for AI processing
 }
 
 interface ChatSession {
@@ -63,22 +65,22 @@ interface AIModel {
 
 const aiModels: AIModel[] = [
   {
-    id: "openai/gpt-3.5-turbo",
-    name: "ChatGPT",
+    id: "openai/gpt-4o-mini",
+    name: "GPT-4o Mini",
     provider: "OpenAI",
-    description: "Balanced performance and speed",
+    description: "Fast and efficient with vision capabilities",
     isFree: false,
-    maxTokens: 2000,
-    capabilities: ["Advanced Reasoning", "Creative Writing", "Problem Solving"]
+    maxTokens: 4000,
+    capabilities: ["Advanced Reasoning", "Creative Writing", "Problem Solving", "Image Analysis"]
   },
   {
     id: "google/gemini-flash-1.5",
     name: "Gemini",
     provider: "Google",
-    description: "Fast and efficient Gemini model",
+    description: "Fast and efficient Gemini model with vision",
     isFree: false,
     maxTokens: 2000,
-    capabilities: ["Quick Responses", "General Q&A", "Basic Analysis"]
+    capabilities: ["Quick Responses", "General Q&A", "Basic Analysis", "Image Analysis"]
   },
   {
     id: "deepseek/deepseek-r1-0528:free",
@@ -89,7 +91,6 @@ const aiModels: AIModel[] = [
     maxTokens: 3000,
     capabilities: ["Deep Analysis", "Research", "Critical Thinking"]
   },
-
 ];
 
 const studyCategories = [
@@ -191,6 +192,22 @@ export default function AIChat() {
     setInputMessage("");
     setIsLoading(true);
 
+    // Log the request for debugging
+    console.log("Sending message to AI model:", selectedModel);
+    console.log("Messages being sent:", messages);
+    console.log("Has images:", messages.some(msg => msg.image));
+    
+    // Check if we have images and if the model supports them
+    const hasImages = messages.some(msg => msg.image);
+    const selectedModelData = aiModels.find(m => m.id === selectedModel);
+    const supportsVision = selectedModelData?.capabilities.includes("Image Analysis");
+    
+    if (hasImages && !supportsVision) {
+      toast.warning("This model doesn't support image analysis. Please select GPT-4o Mini or Gemini for image support.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
@@ -205,12 +222,35 @@ export default function AIChat() {
           messages: [
             {
               role: "system",
-              content: `You are a helpful AI study assistant. Provide clear, educational responses. Help with homework, explain concepts, solve problems, and encourage learning.`
+              content: `You are a helpful AI study assistant. You can analyze images and provide clear, educational responses. Help with homework, explain concepts, solve problems, and encourage learning. When users upload images, analyze them carefully and provide detailed help based on what you see.`
             },
-            ...messages.map(msg => ({
-              role: msg.role,
-              content: msg.content
-            })),
+            ...messages.map(msg => {
+              if (msg.image) {
+                // For messages with images, use the proper multimodal format
+                return {
+                  role: msg.role,
+                  content: [
+                    {
+                      type: "text",
+                      text: msg.content
+                    },
+                    {
+                      type: "image_url",
+                      image_url: {
+                        url: msg.image,
+                        detail: "high"
+                      }
+                    }
+                  ]
+                };
+              } else {
+                // Regular text messages
+                return {
+                  role: msg.role,
+                  content: msg.content
+                };
+              }
+            }),
             {
               role: "user",
               content: inputMessage
@@ -218,7 +258,7 @@ export default function AIChat() {
           ],
           stream: false,
           temperature: 0.7,
-          max_tokens: 1000,
+          max_tokens: 2000,
           top_p: 0.9,
           frequency_penalty: 0.1,
           presence_penalty: 0.1
@@ -226,10 +266,13 @@ export default function AIChat() {
       });
 
       if (!response.ok) {
-        throw new Error(`API request failed: ${response.status}`);
+        const errorText = await response.text();
+        console.error("API Error Response:", errorText);
+        throw new Error(`API request failed: ${response.status}: ${errorText}`);
       }
 
       const data = await response.json();
+      console.log("AI Response received:", data);
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
@@ -241,10 +284,28 @@ export default function AIChat() {
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Error sending message:", error);
+      
+      // Provide more specific error messages
+      let errorContent = "I'm sorry, I encountered an error while processing your request. ";
+      
+      if (error instanceof Error) {
+        if (error.message.includes('400')) {
+          errorContent += "The request format may be incorrect. Please try rephrasing your question.";
+        } else if (error.message.includes('401')) {
+          errorContent += "Authentication failed. Please check your API key.";
+        } else if (error.message.includes('429')) {
+          errorContent += "Rate limit exceeded. Please wait a moment and try again.";
+        } else if (error.message.includes('500')) {
+          errorContent += "Server error. Please try again later.";
+        } else {
+          errorContent += "Please check your connection and try again.";
+        }
+      }
+      
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "I'm sorry, I encountered an error while processing your request. Please check your connection and try again.",
+        content: errorContent,
         timestamp: new Date(),
         model: aiModels.find(m => m.id === selectedModel)?.name
       };
@@ -264,7 +325,15 @@ export default function AIChat() {
 
   const copyMessage = async (content: string, messageId: string) => {
     try {
-      await navigator.clipboard.writeText(content);
+      // Find the message to get image info if present
+      const message = messages.find(msg => msg.id === messageId);
+      let copyText = content;
+      
+      if (message?.image) {
+        copyText += `\n\n[Image attached: ${message.imageDescription}]`;
+      }
+      
+      await navigator.clipboard.writeText(copyText);
       setCopiedId(messageId);
       toast.success("Message copied to clipboard!");
       setTimeout(() => setCopiedId(null), 2000);
@@ -291,9 +360,15 @@ export default function AIChat() {
   };
 
   const exportChat = () => {
-    const chatContent = messages.map(msg => 
-      `${msg.role === 'user' ? 'You' : 'AI'}: ${msg.content}\n\n`
-    ).join('');
+    const chatContent = messages.map(msg => {
+      let content = `${msg.role === 'user' ? 'You' : 'AI'}: ${msg.content}`;
+      
+      if (msg.image) {
+        content += `\n[Image: ${msg.imageDescription}]\n`;
+      }
+      
+      return content + '\n\n';
+    }).join('');
     
     const blob = new Blob([chatContent], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -385,17 +460,56 @@ export default function AIChat() {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Handle file upload - you can implement file processing logic here
-      toast.success(`File "${file.name}" uploaded successfully!`);
-      
-      // Add file info to chat
-      const fileMessage: Message = {
-        id: Date.now().toString(),
-        role: "user",
-        content: `📎 Uploaded file: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, fileMessage]);
+      // Check if it's an image file
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const imageData = e.target?.result as string;
+          
+          // Validate image data
+          if (!imageData || imageData.length === 0) {
+            toast.error("Failed to process image. Please try again.");
+            return;
+          }
+          
+          console.log("Image uploaded:", {
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            dataLength: imageData.length
+          });
+          
+          // Create image message with base64 data
+          const imageMessage: Message = {
+            id: Date.now().toString(),
+            role: "user",
+            content: `📷 I've uploaded an image. Please analyze and help me with it.`,
+            timestamp: new Date(),
+            image: imageData,
+            imageDescription: `Image: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`
+          };
+          
+          setMessages(prev => [...prev, imageMessage]);
+          toast.success(`Image "${file.name}" uploaded successfully!`);
+        };
+        
+        reader.onerror = () => {
+          toast.error("Failed to read image file. Please try again.");
+        };
+        
+        reader.readAsDataURL(file);
+      } else {
+        // Handle non-image files
+        toast.success(`File "${file.name}" uploaded successfully!`);
+        
+        const fileMessage: Message = {
+          id: Date.now().toString(),
+          role: "user",
+          content: `📎 Uploaded file: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, fileMessage]);
+      }
       
       // Reset the file input
       event.target.value = '';
@@ -525,11 +639,26 @@ export default function AIChat() {
                           }`}
                         >
                           <div className="flex items-start justify-between gap-2">
-                            <p className={`text-base leading-relaxed whitespace-pre-wrap ${
-                              message.role === "user" ? "text-primary-foreground" : "text-foreground"
-                            }`}>
-                              {message.content}
-                            </p>
+                            <div className="flex-1">
+                              <p className={`text-base leading-relaxed whitespace-pre-wrap ${
+                                message.role === "user" ? "text-primary-foreground" : "text-foreground"
+                              }`}>
+                                {message.content}
+                              </p>
+                              
+                              {/* Display image if present */}
+                              {message.image && (
+                                <div className="mt-3">
+                                  <img 
+                                    src={message.image} 
+                                    alt="Uploaded content"
+                                    className="max-w-full h-auto rounded-lg border border-border/30 shadow-sm"
+                                    style={{ maxHeight: '300px' }}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                            
                             <Button
                               variant="ghost"
                               size="sm"
