@@ -64,81 +64,45 @@ const aiModels: AIModel[] = [
     name: "Mistral Small 3.2 24B",
     provider: "Mistral AI",
     description: "Fast and efficient model for general tasks",
-    isFree: true,
+    isFree: false,
     maxTokens: 1000,
     capabilities: ["General Q&A", "Homework Help", "Concept Explanation"]
-  },
-  {
-    id: "openai/gpt-4o",
-    name: "GPT-4o",
-    provider: "OpenAI",
-    description: "Most advanced GPT model with multimodal capabilities",
-    isFree: true,
-    maxTokens: 4000,
-    capabilities: ["Advanced Reasoning", "Multimodal", "Creative Writing", "Problem Solving"]
-  },
-  {
-    id: "openai/gpt-4o-mini",
-    name: "GPT-4o Mini",
-    provider: "OpenAI",
-    description: "Fast and efficient GPT-4o variant",
-    isFree: true,
-    maxTokens: 3000,
-    capabilities: ["Fast Response", "General Q&A", "Creative Tasks"]
   },
   {
     id: "openai/gpt-3.5-turbo",
     name: "GPT-3.5 Turbo",
     provider: "OpenAI",
     description: "Balanced performance and speed",
-    isFree: true,
+    isFree: false,
     maxTokens: 2000,
     capabilities: ["Advanced Reasoning", "Creative Writing", "Problem Solving"]
-  },
-  {
-    id: "anthropic/claude-3.5-sonnet-20241022",
-    name: "Claude 3.5 Sonnet",
-    provider: "Anthropic",
-    description: "Advanced reasoning and analysis",
-    isFree: true,
-    maxTokens: 3000,
-    capabilities: ["Deep Analysis", "Research", "Critical Thinking"]
-  },
-  {
-    id: "anthropic/claude-3-haiku-20240307",
-    name: "Claude 3 Haiku",
-    provider: "Anthropic",
-    description: "Fast and efficient Claude model",
-    isFree: true,
-    maxTokens: 2000,
-    capabilities: ["Quick Responses", "General Q&A", "Basic Analysis"]
-  },
-  {
-    id: "google/gemini-pro",
-    name: "Gemini Pro",
-    provider: "Google",
-    description: "Multimodal understanding and generation",
-    isFree: true,
-    maxTokens: 2500,
-    capabilities: ["Multimodal", "Code Generation", "Creative Tasks"]
   },
   {
     id: "meta-llama/llama-3.1-8b-instruct",
     name: "Llama 3.1 8B",
     provider: "Meta",
     description: "Efficient open-source model for general tasks",
-    isFree: true,
+    isFree: false,
     maxTokens: 1500,
     capabilities: ["General Q&A", "Text Generation", "Basic Reasoning"]
   },
   {
-    id: "meta-llama/llama-3.1-70b-instruct",
-    name: "Llama 3.1 70B",
-    provider: "Meta",
-    description: "High-performance open-source model",
-    isFree: true,
-    maxTokens: 3000,
-    capabilities: ["Advanced Reasoning", "Complex Analysis", "Creative Writing"]
+    id: "google/gemini-flash-1.5",
+    name: "Gemini Flash 1.5",
+    provider: "Google",
+    description: "Fast and efficient Gemini model",
+    isFree: false,
+    maxTokens: 2000,
+    capabilities: ["Quick Responses", "General Q&A", "Basic Analysis"]
+  },
+  {
+    id: "anthropic/claude-3-haiku-20240307",
+    name: "Claude 3 Haiku",
+    provider: "Anthropic",
+    description: "Fast and efficient Claude model",
+    isFree: false,
+    maxTokens: 2000,
+    capabilities: ["Quick Responses", "General Q&A", "Basic Analysis"]
   }
 ];
 
@@ -182,7 +146,7 @@ export default function AIChat() {
       title: "Science Questions",
       timestamp: new Date(Date.now() - 172800000), // 2 days ago
       messageCount: 12,
-      model: "Claude 3.5 Sonnet"
+      model: "Claude 3 Haiku"
     }
   ]);
   const [activeTab, setActiveTab] = useState("chat");
@@ -379,7 +343,7 @@ export default function AIChat() {
                           <div className="flex items-center gap-2">
                             <span>{model.name}</span>
                             {model.isFree && (
-                              <Badge variant="secondary" className="text-xs">Free</Badge>
+                              <Badge variant="secondary" className="text-xs">Pro</Badge>
                             )}
                           </div>
                         </SelectItem>
