@@ -66,7 +66,7 @@ interface AIModel {
 const aiModels: AIModel[] = [
   {
     id: "openai/gpt-4o-mini",
-    name: "GPT-4o Mini",
+    name: "ChatGPT",
     provider: "OpenAI",
     description: "Fast and efficient with vision capabilities",
     isFree: false,
@@ -810,7 +810,7 @@ Always provide comprehensive, helpful responses based on the document content yo
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="h-10 w-10 p-0 border border-border rounded-xl hover:bg-muted/50 transition-colors"
+                    className="h-10 w-10 p-0 border border-border rounded-xl hover:bg-orange-600 hover:border-orange-700 transition-colors"
                     title="Upload file"
                     onClick={() => {
                       const fileInput = document.getElementById('file-upload') as HTMLInputElement;
@@ -839,7 +839,7 @@ Always provide comprehensive, helpful responses based on the document content yo
                   type="button"
                   variant={isRecording ? "destructive" : "outline"}
                   size="sm"
-                  className="h-10 w-10 p-0 border border-border rounded-xl hover:bg-muted/50 transition-colors"
+                  className="h-10 w-10 p-0 border border-border rounded-xl hover:bg-orange-600 hover:border-orange-700 transition-colors"
                   onClick={isRecording ? stopRecording : startRecording}
                   title={isRecording ? "Stop recording" : "Start voice recording"}
                 >
