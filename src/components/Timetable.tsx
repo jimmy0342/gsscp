@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Clock, MapPin, User, Download, Printer } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Clock, MapPin, User, Download, Printer, BookOpen, Target, Lightbulb, Calendar, AlertCircle } from "lucide-react";
 
 const timeSlots = [
   "09:00 - 09:45",
@@ -17,72 +19,531 @@ const timeSlots = [
 
 const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+// Enhanced timetable data with detailed class information
 const timetableData = {
   Monday: [
-    { subject: "Mathematics", teacher: "Dr. Smith", room: "101", type: "theory" },
-    { subject: "Physics", teacher: "Prof. Johnson", room: "Lab-A", type: "practical" },
-    { subject: "Chemistry", teacher: "Dr. Brown", room: "102", type: "theory" },
+         { 
+       subject: "Mathematics", 
+       teacher: "Dr. Smith", 
+       room: "101", 
+       type: "theory",
+       chapter: "Chapter 8: Applications of Calculus",
+       topic: "8.2.1 Differentiation Techniques and Integration Methods",
+       page: "156-172",
+       description: "Today we covered advanced calculus concepts including differentiation techniques and basic integration methods. We solved several practice problems involving polynomial and trigonometric functions.",
+       practice: "Complete exercises 1-15 from Chapter 8. Practice differentiation of composite functions.",
+       homework: "Solve 5 integration problems from the textbook.",
+       materials: "Textbook Chapter 8, Calculator, Graph paper",
+       videoLink: "https://www.youtube.com/watch?v=UyqSXS6JNnU&ab_channel=ThePhysicsClassroom"
+     },
+         { 
+       subject: "Physics", 
+       teacher: "Prof. Johnson", 
+       room: "Lab-A", 
+       type: "practical",
+       chapter: "Chapter 5: Mechanics and Motion",
+       topic: "5.3.2 Force and Motion Experiments",
+       page: "89-95",
+       description: "Conducted hands-on experiments with force sensors and motion detectors. We measured acceleration, velocity, and force relationships in various scenarios.",
+       practice: "Analyze the data collected today. Plot graphs of force vs. acceleration.",
+       homework: "Write lab report with conclusions.",
+       materials: "Lab manual, Data sheets, Graphing software",
+       videoLink: "https://www.youtube.com/watch?v=UyqSXS6JNnU&ab_channel=ThePhysicsClassroom"
+     },
+         { 
+       subject: "Chemistry", 
+       teacher: "Dr. Brown", 
+       room: "102", 
+       type: "theory",
+       chapter: "Chapter 12: Organic Chemistry",
+       topic: "12.1.3 Alkanes and Alkenes: Structure and Properties",
+       page: "234-248",
+       description: "Explored the structure and properties of alkanes and alkenes. Discussed IUPAC naming conventions and isomerism.",
+       practice: "Practice naming 20 organic compounds. Draw structural formulas.",
+       homework: "Research applications of alkenes in industry.",
+       materials: "Molecular models, Periodic table, Organic chemistry textbook",
+       videoLink: "https://www.youtube.com/watch?v=UyqSXS6JNnU&ab_channel=ThePhysicsClassroom"
+     },
     { subject: "BREAK", teacher: "", room: "", type: "break" },
-    { subject: "English", teacher: "Ms. Davis", room: "103", type: "theory" },
-    { subject: "Computer Science", teacher: "Mr. Wilson", room: "Lab-B", type: "practical" },
+    { 
+      subject: "English", 
+      teacher: "Ms. Davis", 
+      room: "103", 
+      type: "theory",
+      chapter: "Chapter 7: Shakespearean Literature",
+      topic: "7.2.1 Macbeth Act 1: Character Development and Themes",
+      page: "112-128",
+      description: "Analyzed Act 1 of Macbeth, focusing on character development and themes of ambition and power.",
+      practice: "Write a character analysis of Macbeth. Practice dramatic reading.",
+             homework: "Read Act 2 and prepare for discussion. Due Date: Tuesday",
+      materials: "Macbeth text, Study guide, Notebook"
+    },
+    { 
+      subject: "Computer Science", 
+      teacher: "Mr. Wilson", 
+      room: "Lab-B", 
+      type: "practical",
+      chapter: "Chapter 9: Data Structures",
+      topic: "9.1.2 Arrays and Linked Lists: Implementation and Operations",
+      page: "167-183",
+      description: "Implemented basic array and linked list operations in Python. Created functions for insertion, deletion, and traversal.",
+      practice: "Code a simple contact book using linked lists. Test all operations.",
+             homework: "Implement a stack data structure. Due Date: Thursday",
+      materials: "Python IDE, Data structures textbook, Code examples"
+    },
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
-    { subject: "Biology", teacher: "Dr. Lee", room: "104", type: "theory" },
-    { subject: "Sports", teacher: "Coach Miller", room: "Ground", type: "activity" },
+    { 
+      subject: "Biology", 
+      teacher: "Dr. Lee", 
+      room: "104", 
+      type: "theory",
+      chapter: "Chapter 6: Genetics and Inheritance",
+      topic: "6.2.1 Mendelian Inheritance: Dominant and Recessive Traits",
+      page: "145-162",
+      description: "Studied Gregor Mendel's experiments with pea plants. Learned about dominant and recessive traits, Punnett squares.",
+      practice: "Solve 10 genetics problems using Punnett squares. Practice with different traits.",
+             homework: "Research a genetic disorder and prepare presentation. Due Date: Next Monday",
+      materials: "Genetics textbook, Punnett square worksheets, Online simulations"
+    },
+    { 
+      subject: "Sports", 
+      teacher: "Coach Miller", 
+      room: "Ground", 
+      type: "activity",
+      chapter: "Chapter 15: Team Sports",
+      topic: "15.1.3 Basketball: Shooting Techniques and Defensive Strategies",
+      page: "298-312",
+      description: "Practiced shooting techniques including free throws, layups, and three-point shots. Worked on defensive positioning.",
+      practice: "Practice shooting for 30 minutes daily. Work on dribbling skills.",
+             homework: "Watch a professional basketball game and analyze techniques. Due Date: Sunday",
+      materials: "Basketball, Sports shoes, Water bottle"
+    },
   ],
   Tuesday: [
-    { subject: "Physics", teacher: "Prof. Johnson", room: "105", type: "theory" },
-    { subject: "Mathematics", teacher: "Dr. Smith", room: "101", type: "theory" },
-    { subject: "English", teacher: "Ms. Davis", room: "103", type: "theory" },
+         { 
+       subject: "Physics", 
+       teacher: "Prof. Johnson", 
+       room: "105", 
+       type: "theory",
+       chapter: "Chapter 5: Electromagnetism",
+       topic: "5.4.1 Electric Fields and Forces: Coulomb's Law",
+       page: "96-108",
+       description: "Explored electric field concepts, Coulomb's law, and electric field lines. Solved problems involving point charges.",
+       practice: "Solve electric field problems from textbook. Practice drawing field lines.",
+       homework: "Complete worksheet on electric forces.",
+       materials: "Physics textbook, Calculator, Ruler",
+       videoLink: "https://www.youtube.com/watch?v=UyqSXS6JNnU&ab_channel=ThePhysicsClassroom"
+     },
+    { 
+      subject: "Mathematics", 
+      teacher: "Dr. Smith", 
+      room: "101", 
+      type: "theory",
+      chapter: "Chapter 8: Applications of Calculus",
+      topic: "8.3.2 Applications of Integration: Areas, Volumes, and Work",
+      page: "173-189",
+      description: "Applied integration to find areas, volumes, and work done. Solved real-world problems using calculus.",
+      practice: "Practice area and volume calculations. Work on word problems.",
+             homework: "Solve 8 application problems. Due Date: Friday",
+      materials: "Calculus textbook, Graph paper, Calculator"
+    },
+    { 
+      subject: "English", 
+      teacher: "Ms. Davis", 
+      room: "103", 
+      type: "theory",
+      chapter: "Chapter 7: Shakespearean Literature",
+      topic: "7.2.2 Macbeth Act 2: Plot Development and Character Analysis",
+      page: "129-145",
+      description: "Group discussion on Act 2 of Macbeth. Analyzed Lady Macbeth's influence and the murder of King Duncan.",
+      practice: "Write a diary entry from Macbeth's perspective. Practice dramatic monologues.",
+             homework: "Read Act 3 and identify key themes. Due Date: Thursday",
+      materials: "Macbeth text, Study notes, Character analysis sheets"
+    },
     { subject: "BREAK", teacher: "", room: "", type: "break" },
-    { subject: "Chemistry", teacher: "Dr. Brown", room: "Lab-A", type: "practical" },
-    { subject: "Biology", teacher: "Dr. Lee", room: "104", type: "theory" },
+    { 
+      subject: "Chemistry", 
+      teacher: "Dr. Brown", 
+      room: "Lab-A", 
+      type: "practical",
+      chapter: "Chapter 12: Organic Chemistry",
+      topic: "12.2.1 Alcohol Reactions: Oxidation and Functional Group Transformations",
+      page: "249-265",
+      description: "Performed experiments with different alcohols. Tested oxidation reactions and observed color changes.",
+      practice: "Write balanced equations for all reactions observed. Practice naming alcohols.",
+             homework: "Research industrial uses of alcohols. Due Date: Friday",
+      materials: "Lab report template, Safety equipment, Chemical data sheets"
+    },
+    { 
+      subject: "Biology", 
+      teacher: "Dr. Lee", 
+      room: "104", 
+      type: "theory",
+      chapter: "Chapter 6: Genetics and Inheritance",
+      topic: "6.2.2 Dihybrid Crosses: Two-Trait Inheritance Patterns",
+      page: "163-179",
+      description: "Advanced genetics covering two-trait inheritance. Practiced solving complex Punnett squares.",
+      practice: "Solve 15 dihybrid cross problems. Practice probability calculations.",
+             homework: "Create a family tree showing genetic traits. Due Date: Monday",
+      materials: "Genetics worksheets, Calculator, Family history forms"
+    },
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
-    { subject: "Computer Science", teacher: "Mr. Wilson", room: "Lab-B", type: "practical" },
-    { subject: "Library", teacher: "Librarian", room: "Library", type: "activity" },
+    { 
+      subject: "Computer Science", 
+      teacher: "Mr. Wilson", 
+      room: "Lab-B", 
+      type: "practical",
+      chapter: "Chapter 9: Data Structures",
+      topic: "9.2.1 Sorting and Searching Algorithms: Implementation and Analysis",
+      page: "184-200",
+      description: "Implemented bubble sort, selection sort, and binary search algorithms. Compared their efficiency.",
+      practice: "Code all sorting algorithms. Test with different data sets.",
+             homework: "Implement merge sort algorithm. Due Date: Friday",
+      materials: "Algorithm textbook, Python IDE, Performance analysis tools"
+    },
+    { 
+      subject: "Library", 
+      teacher: "Librarian", 
+      room: "Library", 
+      type: "activity",
+      chapter: "Chapter 18: Research and Information Skills",
+      topic: "18.1.2 Database Navigation and Academic Source Discovery",
+      page: "345-358",
+      description: "Learned to use online databases and library catalogs. Practiced finding academic sources.",
+      practice: "Search for sources on your research topic. Practice citation formatting.",
+             homework: "Find 5 reliable sources for your project. Due Date: Next week",
+      materials: "Library card, Research topic list, Citation guide"
+    },
   ],
   Wednesday: [
-    { subject: "Chemistry", teacher: "Dr. Brown", room: "102", type: "theory" },
-    { subject: "Biology", teacher: "Dr. Lee", room: "104", type: "theory" },
-    { subject: "Mathematics", teacher: "Dr. Smith", room: "101", type: "theory" },
+    { 
+      subject: "Chemistry", 
+      teacher: "Dr. Brown", 
+      room: "102", 
+      type: "theory",
+      chapter: "Chapter 12: Organic Chemistry",
+      topic: "12.3.1 Aromatic Compounds: Benzene Structure and Aromaticity",
+      page: "266-282",
+      description: "Introduced benzene structure and aromaticity. Discussed resonance and stability of aromatic compounds.",
+      practice: "Draw resonance structures for benzene derivatives. Practice naming aromatic compounds.",
+             homework: "Research applications of benzene in industry. Due Date: Friday",
+      materials: "Molecular models, Organic chemistry textbook, Resonance worksheets"
+    },
+    { 
+      subject: "Biology", 
+      teacher: "Dr. Lee", 
+      room: "104", 
+      type: "theory",
+      chapter: "Chapter 6: Genetics and Inheritance",
+      topic: "6.3.1 Evolution and Natural Selection: Mechanisms and Evidence",
+      page: "180-196",
+      description: "Explored Darwin's theory of natural selection. Discussed evidence for evolution and adaptation.",
+      practice: "Analyze case studies of natural selection. Practice identifying adaptations.",
+             homework: "Research a specific example of evolution. Due Date: Monday",
+      materials: "Evolution textbook, Case study materials, Research guidelines"
+    },
+    { 
+      subject: "Mathematics", 
+      teacher: "Dr. Smith", 
+      room: "101", 
+      type: "theory",
+      chapter: "Chapter 8: Applications of Calculus",
+      topic: "8.4.1 Differential Equations: First-Order Equations and Separation of Variables",
+      page: "190-206",
+      description: "Introduction to first-order differential equations. Learned separation of variables method.",
+      practice: "Solve 10 differential equations. Practice with different initial conditions.",
+             homework: "Complete differential equations worksheet. Due Date: Friday",
+      materials: "Calculus textbook, Practice worksheets, Calculator"
+    },
     { subject: "BREAK", teacher: "", room: "", type: "break" },
-    { subject: "Physics", teacher: "Prof. Johnson", room: "Lab-A", type: "practical" },
-    { subject: "English", teacher: "Ms. Davis", room: "103", type: "theory" },
+    { 
+      subject: "Physics", 
+      teacher: "Prof. Johnson", 
+      room: "Lab-A", 
+      type: "practical",
+      topics: "Waves: Sound Wave Properties",
+      description: "Measured frequency, amplitude, and wavelength of sound waves. Used oscilloscopes and frequency generators.",
+      practice: "Analyze wave data. Practice calculating wave properties.",
+             homework: "Write lab report on sound wave experiments. Due Date: Monday",
+      materials: "Lab manual, Data analysis software, Wave property charts"
+    },
+    { 
+      subject: "English", 
+      teacher: "Ms. Davis", 
+      room: "103", 
+      type: "theory",
+      topics: "Literature: Macbeth Act 3 Analysis",
+      description: "Analyzed the turning point in Macbeth. Discussed themes of guilt, paranoia, and the supernatural.",
+      practice: "Write a soliloquy for Macbeth. Practice dramatic interpretation.",
+             homework: "Read Act 4 and prepare for final discussion. Due Date: Friday",
+      materials: "Macbeth text, Character development charts, Theme analysis sheets"
+    },
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
-    { subject: "Computer Science", teacher: "Mr. Wilson", room: "106", type: "theory" },
-    { subject: "Art & Craft", teacher: "Ms. Taylor", room: "Art Room", type: "activity" },
+    { 
+      subject: "Computer Science", 
+      teacher: "Mr. Wilson", 
+      room: "106", 
+      type: "theory",
+      topics: "Database Design: ER Diagrams",
+      description: "Learned entity-relationship modeling. Designed database schemas for various scenarios.",
+      practice: "Create ER diagrams for 3 different systems. Practice normalization.",
+             homework: "Design a database for a school management system. Due Date: Monday",
+      materials: "Database textbook, ER diagram software, Design templates"
+    },
+    { 
+      subject: "Art & Craft", 
+      teacher: "Ms. Taylor", 
+      room: "Art Room", 
+      type: "activity",
+      topics: "Digital Art: Vector Graphics",
+      description: "Introduction to vector graphics using digital tools. Created simple shapes and designs.",
+      practice: "Create 5 vector designs. Practice with different tools and effects.",
+             homework: "Design a logo for your favorite subject. Due Date: Next week",
+      materials: "Digital art software, Drawing tablet, Design inspiration materials"
+    },
   ],
   Thursday: [
-    { subject: "English", teacher: "Ms. Davis", room: "103", type: "theory" },
-    { subject: "Mathematics", teacher: "Dr. Smith", room: "101", type: "theory" },
-    { subject: "Physics", teacher: "Prof. Johnson", room: "105", type: "theory" },
+    { 
+      subject: "English", 
+      teacher: "Ms. Davis", 
+      room: "103", 
+      type: "theory",
+      topics: "Literature: Macbeth Final Discussion",
+      description: "Concluded our study of Macbeth. Discussed the play's themes, character arcs, and Shakespeare's message.",
+      practice: "Write a critical analysis essay. Practice literary analysis techniques.",
+             homework: "Complete Macbeth essay (1000 words). Due Date: Next Monday",
+      materials: "Macbeth text, Essay guidelines, Literary analysis resources"
+    },
+    { 
+      subject: "Mathematics", 
+      teacher: "Dr. Smith", 
+      room: "101", 
+      type: "theory",
+      topics: "Calculus: Applications in Physics",
+      description: "Applied calculus concepts to physics problems. Solved problems involving motion, work, and energy.",
+      practice: "Solve physics problems using calculus. Practice with real-world applications.",
+             homework: "Complete 10 application problems. Due Date: Monday",
+      materials: "Calculus textbook, Physics formulas, Practice problems"
+    },
+    { 
+      subject: "Physics", 
+      teacher: "Prof. Johnson", 
+      room: "105", 
+      type: "theory",
+      topics: "Modern Physics: Quantum Mechanics",
+      description: "Introduction to quantum mechanics concepts. Discussed wave-particle duality and uncertainty principle.",
+      practice: "Solve quantum mechanics problems. Practice with probability calculations.",
+             homework: "Research applications of quantum mechanics. Due Date: Wednesday",
+      materials: "Modern physics textbook, Quantum mechanics resources, Online simulations"
+    },
     { subject: "BREAK", teacher: "", room: "", type: "break" },
-    { subject: "Biology", teacher: "Dr. Lee", room: "Lab-C", type: "practical" },
-    { subject: "Chemistry", teacher: "Dr. Brown", room: "102", type: "theory" },
+    { 
+      subject: "Biology", 
+      teacher: "Dr. Lee", 
+      room: "Lab-C", 
+      type: "practical",
+      topics: "Microbiology: Bacterial Cultures",
+      description: "Prepared and observed bacterial cultures. Learned about aseptic techniques and colony counting.",
+      practice: "Practice aseptic techniques. Count colonies and calculate concentrations.",
+             homework: "Write lab report on bacterial culture experiment. Due Date: Friday",
+      materials: "Lab manual, Safety equipment, Colony counting tools"
+    },
+    { 
+      subject: "Chemistry", 
+      teacher: "Dr. Brown", 
+      room: "102", 
+      type: "theory",
+      topics: "Inorganic Chemistry: Transition Metals",
+      description: "Explored properties of transition metals. Discussed coordination compounds and complex ions.",
+      practice: "Practice naming coordination compounds. Draw complex ion structures.",
+             homework: "Research uses of transition metals in technology. Due Date: Monday",
+      materials: "Inorganic chemistry textbook, Periodic table, Complex ion models"
+    },
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
-    { subject: "Computer Science", teacher: "Mr. Wilson", room: "Lab-B", type: "practical" },
-    { subject: "Music", teacher: "Ms. Garcia", room: "Music Room", type: "activity" },
+    { 
+      subject: "Computer Science", 
+      teacher: "Mr. Wilson", 
+      room: "Lab-B", 
+      type: "practical",
+      topics: "Web Development: HTML and CSS",
+      description: "Built basic web pages using HTML and CSS. Learned about responsive design principles.",
+      practice: "Create 3 different web page layouts. Practice CSS styling.",
+             homework: "Build a personal portfolio website. Due Date: Next week",
+      materials: "Web development textbook, Code editor, CSS framework resources"
+    },
+    { 
+      subject: "Music", 
+      teacher: "Ms. Garcia", 
+      room: "Music Room", 
+      type: "activity",
+      topics: "Music Theory: Chord Progressions",
+      description: "Learned about chord progressions and harmonic analysis. Practiced identifying chord types.",
+      practice: "Practice chord progressions on piano. Analyze popular songs.",
+             homework: "Compose a simple 8-bar melody. Due Date: Sunday",
+      materials: "Music theory textbook, Piano/keyboard, Composition software"
+    },
   ],
   Friday: [
-    { subject: "Mathematics", teacher: "Dr. Smith", room: "101", type: "theory" },
-    { subject: "Chemistry", teacher: "Dr. Brown", room: "102", type: "theory" },
-    { subject: "Biology", teacher: "Dr. Lee", room: "104", type: "theory" },
+    { 
+      subject: "Mathematics", 
+      teacher: "Dr. Smith", 
+      room: "101", 
+      type: "theory",
+      topics: "Calculus: Series and Sequences",
+      description: "Introduced infinite series and sequences. Learned about convergence tests and power series.",
+      practice: "Practice convergence tests. Work on series problems.",
+             homework: "Complete series worksheet. Due Date: Monday",
+      materials: "Calculus textbook, Series practice problems, Calculator"
+    },
+    { 
+      subject: "Chemistry", 
+      teacher: "Dr. Brown", 
+      room: "102", 
+      type: "theory",
+      topics: "Physical Chemistry: Thermodynamics",
+      description: "Explored first law of thermodynamics. Discussed heat, work, and internal energy changes.",
+      practice: "Solve thermodynamics problems. Practice with different processes.",
+             homework: "Complete thermodynamics worksheet. Due Date: Wednesday",
+      materials: "Physical chemistry textbook, Thermodynamics tables, Calculator"
+    },
+    { 
+      subject: "Biology", 
+      teacher: "Dr. Lee", 
+      room: "104", 
+      type: "theory",
+      topics: "Ecology: Population Dynamics",
+      description: "Studied population growth models and carrying capacity. Discussed human impact on ecosystems.",
+      practice: "Solve population growth problems. Practice with different models.",
+             homework: "Research an endangered species. Due Date: Monday",
+      materials: "Ecology textbook, Population data, Research guidelines"
+    },
     { subject: "BREAK", teacher: "", room: "", type: "break" },
-    { subject: "Physics", teacher: "Prof. Johnson", room: "105", type: "theory" },
-    { subject: "English", teacher: "Ms. Davis", room: "103", type: "theory" },
+    { 
+      subject: "Physics", 
+      teacher: "Prof. Johnson", 
+      room: "105", 
+      type: "theory",
+      topics: "Optics: Light and Reflection",
+      description: "Explored laws of reflection and refraction. Discussed image formation in mirrors and lenses.",
+      practice: "Solve optics problems. Practice ray diagram construction.",
+             homework: "Complete optics worksheet. Due Date: Wednesday",
+      materials: "Optics textbook, Ray diagram templates, Calculator"
+    },
+    { 
+      subject: "English", 
+      teacher: "Ms. Davis", 
+      room: "103", 
+      type: "theory",
+      topics: "Writing: Essay Structure and Style",
+      description: "Learned about essay organization, thesis statements, and supporting evidence. Practiced writing introductions.",
+      practice: "Write 3 different essay introductions. Practice thesis statement writing.",
+             homework: "Write a complete essay on a topic of choice. Due Date: Monday",
+      materials: "Writing guide, Essay templates, Style manual"
+    },
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
-    { subject: "Computer Science", teacher: "Mr. Wilson", room: "106", type: "theory" },
-    { subject: "Assembly", teacher: "Principal", room: "Auditorium", type: "activity" },
+    { 
+      subject: "Computer Science", 
+      teacher: "Mr. Wilson", 
+      room: "106", 
+      type: "theory",
+      topics: "Software Engineering: Design Patterns",
+      description: "Introduction to common design patterns in software development. Discussed singleton, factory, and observer patterns.",
+      practice: "Implement 3 design patterns in code. Practice with different scenarios.",
+             homework: "Design a software system using design patterns. Due Date: Monday",
+      materials: "Software engineering textbook, Design pattern examples, UML tools"
+    },
+    { 
+      subject: "Assembly", 
+      teacher: "Principal", 
+      room: "Auditorium", 
+      type: "activity",
+      topics: "School Announcements and Awards",
+      description: "Weekly assembly with important announcements, student achievements recognition, and motivational speeches.",
+      practice: "Practice public speaking skills. Participate in school activities.",
+             homework: "Prepare for next week's assembly if you have a role. Due Date: Ongoing",
+      materials: "Assembly schedule, School announcements, Achievement certificates"
+    },
   ],
   Saturday: [
-    { subject: "Project Work", teacher: "All Teachers", room: "Various", type: "project" },
-    { subject: "Mathematics", teacher: "Dr. Smith", room: "101", type: "theory" },
-    { subject: "Science Quiz", teacher: "Dr. Brown", room: "102", type: "activity" },
+    { 
+      subject: "Project Work", 
+      teacher: "All Teachers", 
+      room: "Various", 
+      type: "project",
+      topics: "Interdisciplinary Project Development",
+      description: "Work on long-term projects combining multiple subjects. Collaborate with peers and teachers.",
+      practice: "Work on your project milestones. Practice research and presentation skills.",
+             homework: "Complete project phase 2. Due Date: Next Saturday",
+      materials: "Project guidelines, Research materials, Presentation tools"
+    },
+    { 
+      subject: "Mathematics", 
+      teacher: "Dr. Smith", 
+      room: "101", 
+      type: "theory",
+      topics: "Calculus: Review and Practice",
+      description: "Comprehensive review of all calculus topics covered this week. Solved challenging problems and clarified doubts.",
+      practice: "Review all calculus concepts. Practice with mixed problems.",
+             homework: "Complete review worksheet. Due Date: Monday",
+      materials: "Calculus textbook, Review materials, Practice problems"
+    },
+    { 
+      subject: "Science Quiz", 
+      teacher: "Dr. Brown", 
+      room: "102", 
+      type: "activity",
+      topics: "Science Knowledge Competition",
+      description: "Participated in science quiz competition. Answered questions from physics, chemistry, and biology.",
+      practice: "Review science concepts. Practice quiz-style questions.",
+             homework: "Prepare for next week's quiz. Due Date: Ongoing",
+      materials: "Science textbooks, Quiz materials, Study guides"
+    },
     { subject: "BREAK", teacher: "", room: "", type: "break" },
-    { subject: "Sports", teacher: "Coach Miller", room: "Ground", type: "activity" },
-    { subject: "Club Activities", teacher: "Various", room: "Various", type: "activity" },
+    { 
+      subject: "Sports", 
+      teacher: "Coach Miller", 
+      room: "Ground", 
+      type: "activity",
+      topics: "Team Sports: Basketball Tournament",
+      description: "Participated in inter-class basketball tournament. Practiced teamwork and sportsmanship.",
+      practice: "Practice basketball skills daily. Work on team coordination.",
+             homework: "Watch basketball games and analyze strategies. Due Date: Sunday",
+      materials: "Basketball equipment, Team uniforms, Sports gear"
+    },
+    { 
+      subject: "Club Activities", 
+      teacher: "Various", 
+      room: "Various", 
+      type: "activity",
+      topics: "Student Club Meetings and Activities",
+      description: "Participated in various student clubs including science club, literature club, and coding club.",
+      practice: "Participate actively in club activities. Develop leadership skills.",
+             homework: "Prepare for next club meeting. Due Date: Ongoing",
+      materials: "Club materials, Activity schedules, Leadership resources"
+    },
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
-    { subject: "Study Hall", teacher: "Class Teacher", room: "103", type: "study" },
-    { subject: "Free Period", teacher: "", room: "", type: "free" },
+    { 
+      subject: "Study Hall", 
+      teacher: "Class Teacher", 
+      room: "103", 
+      type: "study",
+      topics: "Independent Study and Homework",
+      description: "Quiet study time to complete homework, review lessons, and prepare for upcoming classes.",
+      practice: "Complete pending assignments. Review difficult concepts.",
+             homework: "Finish all pending homework. Due Date: Monday",
+      materials: "Study materials, Homework assignments, Reference books"
+    },
+    { 
+      subject: "Free Period", 
+      teacher: "", 
+      room: "", 
+      type: "free",
+      topics: "Personal Time and Relaxation",
+      description: "Free time for personal activities, relaxation, or catching up with friends.",
+      practice: "Use time productively. Balance work and relaxation.",
+             homework: "Plan for next week. Due Date: Ongoing",
+      materials: "Personal planner, Relaxation activities, Social time"
+    },
   ],
 };
 
@@ -97,6 +558,136 @@ const getSubjectColor = (type: string) => {
     case "free": return "bg-gray-100 text-gray-600 border-gray-300";
     default: return "bg-muted text-muted-foreground border-muted";
   }
+};
+
+// Component for displaying detailed class information
+const ClassDetailsDialog = ({ 
+  classData, 
+  day, 
+  time 
+}: { 
+  classData: any; 
+  day: string; 
+  time: string; 
+}) => {
+  if (classData.type === "break" || classData.type === "free") {
+    return null;
+  }
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="cursor-pointer hover:scale-105 transition-transform">
+          <div className={`rounded-lg border p-3 h-full ${getSubjectColor(classData.type)}`}>
+            <div className="font-medium text-sm mb-1">
+              {classData.subject}
+            </div>
+            {classData.teacher && (
+              <>
+                <div className="flex items-center gap-1 text-xs mb-1">
+                  <User className="h-3 w-3" />
+                  {classData.teacher}
+                </div>
+                <div className="flex items-center gap-1 text-xs">
+                  <MapPin className="h-3 w-3" />
+                  {classData.room}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <BookOpen className="h-5 w-5 text-primary" />
+            {classData.subject} - {day}
+          </DialogTitle>
+          <DialogDescription>
+            {time} • {classData.teacher} • Room {classData.room}
+          </DialogDescription>
+        </DialogHeader>
+        
+        <div className="space-y-6">
+          {/* Topic Details */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-lg font-semibold text-primary">
+              <BookOpen className="h-5 w-5" />
+              Topic Details
+            </div>
+            <div className="space-y-3">
+              <div className="bg-primary/5 p-3 rounded-lg border border-primary/20">
+                <p className="font-semibold text-primary mb-1">{classData.chapter}</p>
+                <p className="text-foreground mb-1">Topic: {classData.topic}</p>
+                <p className="text-sm text-muted-foreground">Page: {classData.page}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Class Description */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-lg font-semibold text-secondary">
+              <Lightbulb className="h-5 w-5" />
+              What We Learned
+            </div>
+            <p className="text-foreground bg-secondary/5 p-3 rounded-lg border border-secondary/20">
+              {classData.description}
+            </p>
+          </div>
+
+          {/* Practice Suggestions */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-lg font-semibold text-accent">
+              <AlertCircle className="h-5 w-5" />
+              Practice Suggestions
+            </div>
+            <p className="text-foreground bg-accent/5 p-3 rounded-lg border border-accent/20">
+              {classData.practice}
+            </p>
+          </div>
+
+                     {/* Homework */}
+           <div className="space-y-2">
+             <div className="flex items-center gap-2 text-lg font-semibold text-orange-600">
+               <Calendar className="h-5 w-5" />
+               Homework
+             </div>
+             <p className="text-foreground bg-orange-50 p-3 rounded-lg border border-orange-200">
+               {classData.homework}
+             </p>
+           </div>
+
+                     
+
+           {/* Materials & Resources For HomeWork */}
+           <div className="space-y-2">
+             <div className="flex items-center gap-2 text-lg font-semibold text-green-600">
+               <BookOpen className="h-5 w-5" />
+               Materials & Resources For HomeWork
+             </div>
+             <div className="bg-green-50 p-3 rounded-lg border border-green-200">
+               <p className="text-foreground mb-2">{classData.materials}</p>
+               {classData.videoLink && (
+                 <div className="mt-3">
+                   <a 
+                     href={classData.videoLink} 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 underline transition-colors"
+                   >
+                     <span>📹 Watch Video Tutorial</span>
+                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                     </svg>
+                   </a>
+                 </div>
+               )}
+             </div>
+           </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
 };
 
 export default function Timetable() {
@@ -152,7 +743,7 @@ stream
 BT
 /F1 18 Tf
 72 720 Td
-(Class Timetable - 12-A Science) Tj
+(Class Timetable - 10-A Science) Tj
 0 -30 Td
 /F1 12 Tf
 (January 2025 - Week 3) Tj
@@ -206,9 +797,9 @@ startxref
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Class Timetable
+            Interactive Class Timetable
           </h1>
-          <p className="text-muted-foreground">Weekly schedule for Class 12-A Science</p>
+          <p className="text-muted-foreground">Click on any subject to view chapter details, topics, and page numbers</p>
           <div className="flex flex-col sm:flex-row gap-4 mt-2 text-sm">
             <Badge variant="outline" className="w-fit">
               <Clock className="h-3 w-3 mr-1" />
@@ -231,14 +822,14 @@ startxref
         </div>
       </div>
 
-      {/* Timetable */}
+      {/* Interactive Timetable */}
       <Card className="bg-card/80 backdrop-blur-sm border shadow-card overflow-hidden">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
-            Weekly Schedule
+            Weekly Schedule - Click Subjects for Chapter Details
           </CardTitle>
-          <CardDescription>Monday to Saturday class schedule</CardDescription>
+          <CardDescription>Interactive timetable with chapter information, topics, and page numbers for each day</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
@@ -265,23 +856,19 @@ startxref
                       
                       return (
                         <td key={`${day}-${timeIndex}`} className="p-2">
-                          <div className={`rounded-lg border p-3 h-full ${getSubjectColor(classData.type)}`}>
-                            <div className="font-medium text-sm mb-1">
-                              {classData.subject}
+                          {isBreak ? (
+                            <div className={`rounded-lg border p-3 h-full ${getSubjectColor(classData.type)}`}>
+                              <div className="font-medium text-sm mb-1">
+                                {classData.subject}
+                              </div>
                             </div>
-                            {!isBreak && classData.teacher && (
-                              <>
-                                <div className="flex items-center gap-1 text-xs mb-1">
-                                  <User className="h-3 w-3" />
-                                  {classData.teacher}
-                                </div>
-                                <div className="flex items-center gap-1 text-xs">
-                                  <MapPin className="h-3 w-3" />
-                                  {classData.room}
-                                </div>
-                              </>
-                            )}
-                          </div>
+                          ) : (
+                            <ClassDetailsDialog 
+                              classData={classData} 
+                              day={day} 
+                              time={time} 
+                            />
+                          )}
                         </td>
                       );
                     })}
@@ -293,36 +880,49 @@ startxref
         </CardContent>
       </Card>
 
-      {/* Legend */}
+      {/* Enhanced Legend */}
       <Card className="bg-card/80 backdrop-blur-sm border shadow-card">
         <CardHeader>
-          <CardTitle className="text-lg">Legend</CardTitle>
+          <CardTitle className="text-lg">Interactive Features</CardTitle>
+          <CardDescription>Click on any subject to view chapter information, topics, and page numbers</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-primary/10 border border-primary/20"></div>
-              <span className="text-sm">Theory Classes</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="space-y-3">
+              <h4 className="font-semibold text-primary">Theory Classes</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p>• View chapter and topic details</p>
+                <p>• Check page numbers in textbook</p>
+                <p>• Access practice suggestions</p>
+                <p>• See homework assignments</p>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-accent/10 border border-accent/20"></div>
-              <span className="text-sm">Practical Classes</span>
+            <div className="space-y-3">
+              <h4 className="font-semibold text-accent">Practical Classes</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p>• View chapter and experiment details</p>
+                <p>• Check lab manual page numbers</p>
+                <p>• See practice exercises</p>
+                <p>• Access lab report guidelines</p>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-emerald-500/10 border border-emerald-500/20"></div>
-              <span className="text-sm">Activities</span>
+            <div className="space-y-3">
+              <h4 className="font-semibold text-emerald-600">Activities</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p>• View chapter and activity details</p>
+                <p>• Check participation requirements</p>
+                <p>• See practice suggestions</p>
+                <p>• Access activity materials</p>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-purple-500/10 border border-purple-500/20"></div>
-              <span className="text-sm">Project Work</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-orange-500/10 border border-orange-500/20"></div>
-              <span className="text-sm">Study Hall</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-muted border border-muted"></div>
-              <span className="text-sm">Break/Lunch</span>
+            <div className="space-y-3">
+              <h4 className="font-semibold text-purple-600">Project Work</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p>• View chapter and project guidelines</p>
+                <p>• Check milestones and deadlines</p>
+                <p>• See collaboration details</p>
+                <p>• Access project resources</p>
+              </div>
             </div>
           </div>
         </CardContent>

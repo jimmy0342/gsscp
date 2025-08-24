@@ -132,6 +132,49 @@ export default function Notifications() {
         <p className="text-muted-foreground">Stay updated with teacher advice and school announcements</p>
       </div>
 
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+        {/* Total Teacher Advice Card */}
+        <Card className="bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
+          <CardContent className="p-2 text-center">
+            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-1">
+              <MessageSquare className="h-4 w-4 text-blue-600" />
+            </div>
+            <h3 className="text-xs font-semibold text-gray-800 mb-1">Total Teacher Advice</h3>
+            <p className="text-lg font-bold text-gray-800">{teacherAdvice.length}</p>
+          </CardContent>
+        </Card>
+
+        {/* School Notifications Card */}
+        <Card className="bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
+          <CardContent className="p-2 text-center">
+            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-1">
+              <Bell className="h-4 w-4 text-green-600" />
+            </div>
+            <h3 className="text-xs font-semibold text-gray-800 mb-1">School Notifications</h3>
+            <p className="text-lg font-bold text-gray-800">{schoolNotifications.length}</p>
+          </CardContent>
+        </Card>
+
+        {/* Urgent Items Card */}
+        <Card className="bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
+          <CardContent className="p-2 text-center">
+            <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-1">
+              <div className="relative">
+                <div className="w-4 h-4 bg-red-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">!</span>
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-1.5 h-1.5 bg-red-600 rounded-full"></div>
+              </div>
+            </div>
+            <h3 className="text-xs font-semibold text-gray-800 mb-1">Urgent Items</h3>
+            <p className="text-lg font-bold text-gray-800">
+              {schoolNotifications.filter(n => n.urgent).length}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Content in Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Teacher Advice */}
