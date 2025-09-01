@@ -65,6 +65,15 @@ interface AIModel {
 
 const aiModels: AIModel[] = [
   {
+    id: "system-ai-model",
+    name: "System AI Model",
+    provider: "Custom",
+    description: "Specialized AI with predefined functionality for Administrators",
+    isFree: true,
+    maxTokens: 4000,
+    capabilities: ["Specialized Functions", "Predefined Responses", "Role-Specific Assistance"]
+  },
+  {
     id: "openai/gpt-4o-mini",
     name: "ChatGPT",
     provider: "OpenAI",
@@ -107,7 +116,7 @@ const OPENROUTER_API_KEY = "sk-or-v1-099f0d3153926f385edadfbb488520f6f7356a17eaa
 export default function AIChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
-  const [selectedModel, setSelectedModel] = useState("openai/gpt-3.5-turbo");
+  const [selectedModel, setSelectedModel] = useState("system-ai-model");
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
