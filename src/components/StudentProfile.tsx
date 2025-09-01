@@ -246,19 +246,6 @@ export default function StudentProfile() {
           <CardDescription>Primary guardian and emergency contact information</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {guardianInfo.map((info, index) => (
-              <div key={info.label} className="flex items-center gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
-                <div className="p-3 rounded-full bg-accent/10">
-                  <info.icon className="h-5 w-5 text-accent" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-muted-foreground">{info.label}</p>
-                  <p className="font-medium text-lg">{info.value}</p>
-                </div>
-              </div>
-            ))}
-          </div>
           
           {/* Guardian Profile Section */}
           <div className="mt-6 p-4 rounded-lg bg-muted/30 border border-accent/20">

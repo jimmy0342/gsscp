@@ -692,103 +692,600 @@ const ClassDetailsDialog = ({
 
 export default function Timetable() {
   const handlePrint = () => {
-    window.print();
+    // Get the timetable table element
+    const timetableTable = document.querySelector('.overflow-x-auto table');
+    
+    if (!timetableTable) {
+      alert('Timetable not found. Please try again.');
+      return;
+    }
+
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      alert('Please allow popups to print the timetable.');
+      return;
+    }
+
+    // Get the current styles
+    const styles = `
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          margin: 0;
+          padding: 20px;
+          background: white;
+          color: #1f2937;
+        }
+        
+        .header {
+          text-align: center;
+          margin-bottom: 30px;
+          padding: 20px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border-radius: 12px;
+        }
+        
+        .header h1 {
+          font-size: 28px;
+          font-weight: 700;
+          margin: 0 0 10px 0;
+        }
+        
+        .header p {
+          font-size: 16px;
+          margin: 5px 0;
+          opacity: 0.9;
+        }
+        
+        .badges {
+          display: flex;
+          justify-content: center;
+          gap: 15px;
+          margin-top: 15px;
+        }
+        
+        .badge {
+          background: rgba(255, 255, 255, 0.2);
+          padding: 8px 16px;
+          border-radius: 20px;
+          font-size: 14px;
+          font-weight: 500;
+        }
+        
+        .timetable-container {
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+          margin-bottom: 30px;
+        }
+        
+        .timetable-header {
+          background: #f8fafc;
+          padding: 20px;
+          border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .timetable-header h2 {
+          font-size: 20px;
+          font-weight: 600;
+          margin: 0 0 5px 0;
+          color: #1f2937;
+        }
+        
+        .timetable-header p {
+          color: #6b7280;
+          margin: 0;
+        }
+        
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 14px;
+        }
+        
+        th {
+          background: #f1f5f9;
+          padding: 15px;
+          text-align: left;
+          font-weight: 600;
+          color: #1f2937;
+          border-bottom: 2px solid #e2e8f0;
+          min-width: 120px;
+        }
+        
+        td {
+          padding: 12px;
+          border-bottom: 1px solid #f1f5f9;
+          vertical-align: top;
+        }
+        
+        .time-cell {
+          background: #f8fafc;
+          font-weight: 500;
+          color: #374151;
+        }
+        
+        .subject-card {
+          background: #eff6ff;
+          border: 1px solid #dbeafe;
+          border-radius: 8px;
+          padding: 12px;
+          margin: 2px;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        
+        .subject-card:hover {
+          background: #dbeafe;
+          transform: translateY(-1px);
+        }
+        
+        .subject-name {
+          font-weight: 600;
+          color: #1e40af;
+          margin-bottom: 5px;
+        }
+        
+        .subject-details {
+          font-size: 12px;
+          color: #6b7280;
+        }
+        
+        .break-cell {
+          background: #f9fafb;
+          border: 1px solid #e5e7eb;
+          border-radius: 8px;
+          padding: 12px;
+          text-align: center;
+          color: #6b7280;
+          font-weight: 500;
+        }
+        
+        .legend {
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+        }
+        
+        .legend h3 {
+          font-size: 18px;
+          font-weight: 600;
+          margin: 0 0 15px 0;
+          color: #1f2937;
+        }
+        
+        .legend-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 20px;
+        }
+        
+        .legend-section h4 {
+          font-size: 16px;
+          font-weight: 600;
+          margin: 0 0 10px 0;
+          color: #1e40af;
+        }
+        
+        .legend-section ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+        
+        .legend-section li {
+          padding: 3px 0;
+          color: #6b7280;
+          font-size: 14px;
+        }
+        
+        .legend-section li:before {
+          content: "•";
+          color: #1e40af;
+          font-weight: bold;
+          margin-right: 8px;
+        }
+        
+        @media print {
+          body { padding: 0; }
+          .header { background: #f3f4f6 !important; color: #1f2937 !important; }
+          .timetable-container { box-shadow: none; border: 1px solid #d1d5db; }
+          .legend { box-shadow: none; border: 1px solid #d1d5db; }
+        }
+      </style>
+    `;
+
+    // Create the HTML content with the actual timetable
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Class Timetable - 10-A Science</title>
+          <meta charset="utf-8">
+        </head>
+        <body>
+          ${styles}
+          
+          <div class="header">
+            <h1>Interactive Class Timetable</h1>
+            <p>Select a subject to see today's lessons by chapter, topic, and page.</p>
+            <div class="badges">
+              <span class="badge">January 2025 - Week 3</span>
+              <span class="badge">School Hours: 09:00 AM - 03:30 PM</span>
+            </div>
+          </div>
+          
+          <div class="timetable-container">
+            <div class="timetable-header">
+              <h2>Weekly Schedule - Click Subjects for Chapter Details</h2>
+              <p>Interactive timetable with chapter information, topics, and page numbers for each day</p>
+            </div>
+            
+            ${timetableTable.outerHTML}
+          </div>
+          
+          <div class="legend">
+            <h3>Interactive Features</h3>
+            <p style="color: #6b7280; margin-bottom: 20px;">Click on any subject to view chapter information, topics, and page numbers</p>
+            
+            <div class="legend-grid">
+              <div class="legend-section">
+                <h4>Theory Classes</h4>
+                <ul>
+                  <li>View chapter and topic details</li>
+                  <li>Check page numbers in textbook</li>
+                  <li>Access practice suggestions</li>
+                  <li>See homework assignments</li>
+                </ul>
+              </div>
+              
+              <div class="legend-section">
+                <h4>Practical Classes</h4>
+                <ul>
+                  <li>View chapter and experiment details</li>
+                  <li>Check lab manual page numbers</li>
+                  <li>See practice exercises</li>
+                  <li>Access lab report guidelines</li>
+                </ul>
+              </div>
+              
+              <div class="legend-section">
+                <h4>Activities</h4>
+                <ul>
+                  <li>View chapter and activity details</li>
+                  <li>Check participation requirements</li>
+                  <li>See practice suggestions</li>
+                  <li>Access activity materials</li>
+                </ul>
+              </div>
+              
+              <div class="legend-section">
+                <h4>Project Work</h4>
+                <ul>
+                  <li>View chapter and project guidelines</li>
+                  <li>Check milestones and deadlines</li>
+                  <li>See collaboration details</li>
+                  <li>Access project resources</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div style="text-align: center; margin-top: 30px; padding: 20px; color: #6b7280; border-top: 1px solid #e5e7eb;">
+            <p>Downloaded from Student Portal • Date: ${new Date().toLocaleDateString()}</p>
+          </div>
+        </body>
+      </html>
+    `;
+
+    // Write the content to the new window
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+    
+    // Wait for content to load, then automatically trigger print dialog
+    printWindow.onload = function() {
+      setTimeout(() => {
+        printWindow.print();
+        // Close the window after printing
+        setTimeout(() => printWindow.close(), 1000);
+      }, 500);
+    };
   };
 
   const handleDownload = () => {
-    // Generate a simple PDF for the timetable
-    const pdfContent = `%PDF-1.4
-1 0 obj
-<<
-/Type /Catalog
-/Pages 2 0 R
->>
-endobj
-
-2 0 obj
-<<
-/Type /Pages
-/Kids [3 0 R]
-/Count 1
->>
-endobj
-
-3 0 obj
-<<
-/Type /Page
-/Parent 2 0 R
-/Resources <<
-/Font <<
-/F1 4 0 R
->>
->>
-/MediaBox [0 0 612 792]
-/Contents 5 0 R
->>
-endobj
-
-4 0 obj
-<<
-/Type /Font
-/Subtype /Type1
-/BaseFont /Times-Roman
->>
-endobj
-
-5 0 obj
-<<
-/Length 200
->>
-stream
-BT
-/F1 18 Tf
-72 720 Td
-(Class Timetable - 10-A Science) Tj
-0 -30 Td
-/F1 12 Tf
-(January 2025 - Week 3) Tj
-0 -20 Td
-(School Hours: 09:00 AM - 03:30 PM) Tj
-0 -30 Td
-(Monday to Saturday Schedule) Tj
-0 -20 Td
-(Downloaded from Student Portal) Tj
-0 -20 Td
-(Date: ${new Date().toLocaleDateString()}) Tj
-ET
-endstream
-endobj
-
-xref
-0 6
-0000000000 65535 f 
-0000000010 00000 n 
-0000000079 00000 n 
-0000000173 00000 n 
-0000000301 00000 n 
-0000000380 00000 n 
-trailer
-<<
-/Size 6
-/Root 1 0 R
->>
-startxref
-648
-%%EOF`;
+    // Get the timetable table element
+    const timetableTable = document.querySelector('.overflow-x-auto table');
     
-    const blob = new Blob([pdfContent], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
+    if (!timetableTable) {
+      alert('Timetable not found. Please try again.');
+      return;
+    }
+
+    // Create the HTML content with the actual timetable
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Class Timetable - 10-A Science</title>
+          <meta charset="utf-8">
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+            
+            body {
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              margin: 0;
+              padding: 20px;
+              background: white;
+              color: #1f2937;
+            }
+            
+            .header {
+              text-align: center;
+              margin-bottom: 30px;
+              padding: 20px;
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              color: white;
+              border-radius: 12px;
+            }
+            
+            .header h1 {
+              font-size: 28px;
+              font-weight: 700;
+              margin: 0 0 10px 0;
+            }
+            
+            .header p {
+              font-size: 16px;
+              margin: 5px 0;
+              opacity: 0.9;
+            }
+            
+            .badges {
+              display: flex;
+              justify-content: center;
+              gap: 15px;
+              margin-top: 15px;
+            }
+            
+            .badge {
+              background: rgba(255, 255, 255, 0.2);
+              padding: 8px 16px;
+              border-radius: 20px;
+              font-size: 14px;
+              font-weight: 500;
+            }
+            
+            .timetable-container {
+              background: white;
+              border-radius: 12px;
+              box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+              overflow: hidden;
+              margin-bottom: 30px;
+            }
+            
+            .timetable-header {
+              background: #f8fafc;
+              padding: 20px;
+              border-bottom: 1px solid #e2e8f0;
+            }
+            
+            .timetable-header h2 {
+              font-size: 20px;
+              font-weight: 600;
+              margin: 0 0 5px 0;
+              color: #1f2937;
+            }
+            
+            .timetable-header p {
+              color: #6b7280;
+              margin: 0;
+            }
+            
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              font-size: 14px;
+            }
+            
+            th {
+              background: #f1f5f9;
+              padding: 15px;
+              text-align: left;
+              font-weight: 600;
+              color: #1f2937;
+              border-bottom: 2px solid #e2e8f0;
+              min-width: 120px;
+            }
+            
+            td {
+              padding: 12px;
+              border-bottom: 1px solid #f1f5f9;
+              vertical-align: top;
+            }
+            
+            .time-cell {
+              background: #f8fafc;
+              font-weight: 500;
+              color: #374151;
+            }
+            
+            .subject-card {
+              background: #eff6ff;
+              border: 1px solid #dbeafe;
+              border-radius: 8px;
+              padding: 12px;
+              margin: 2px;
+              cursor: pointer;
+              transition: all 0.2s;
+            }
+            
+            .subject-card:hover {
+              background: #dbeafe;
+              transform: translateY(-1px);
+            }
+            
+            .subject-name {
+              font-weight: 600;
+              color: #1e40af;
+              margin-bottom: 5px;
+            }
+            
+            .subject-details {
+              font-size: 12px;
+              color: #6b7280;
+            }
+            
+            .break-cell {
+              background: #f9fafb;
+              border: 1px solid #e5e7eb;
+              border-radius: 8px;
+              padding: 12px;
+              text-align: center;
+              color: #6b7280;
+              font-weight: 500;
+            }
+            
+            .legend {
+              background: white;
+              border-radius: 12px;
+              box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+              padding: 20px;
+            }
+            
+            .legend h3 {
+              font-size: 18px;
+              font-weight: 600;
+              margin: 0 0 15px 0;
+              color: #1f2937;
+            }
+            
+            .legend-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+              gap: 20px;
+            }
+            
+            .legend-section h4 {
+              font-size: 16px;
+              font-weight: 600;
+              margin: 0 0 10px 0;
+              color: #1e40af;
+            }
+            
+            .legend-section ul {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+            }
+            
+            .legend-section li {
+              padding: 3px 0;
+              color: #6b7280;
+              font-size: 14px;
+            }
+            
+            .legend-section li:before {
+              content: "•";
+              color: #1e40af;
+              font-weight: bold;
+              margin-right: 8px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>Interactive Class Timetable</h1>
+            <p>Select a subject to see today's lessons by chapter, topic, and page.</p>
+            <div class="badges">
+              <span class="badge">January 2025 - Week 3</span>
+              <span class="badge">School Hours: 09:00 AM - 03:30 PM</span>
+            </div>
+          </div>
+          
+          <div class="timetable-container">
+            <div class="timetable-header">
+              <h2>Weekly Schedule - Click Subjects for Chapter Details</h2>
+              <p>Interactive timetable with chapter information, topics, and page numbers for each day</p>
+            </div>
+            
+            ${timetableTable.outerHTML}
+          </div>
+          
+          <div class="legend">
+            <h3>Interactive Features</h3>
+            <p style="color: #6b7280; margin-bottom: 20px;">Click on any subject to view chapter information, topics, and page numbers</p>
+            
+            <div class="legend-grid">
+              <div class="legend-section">
+                <h4>Theory Classes</h4>
+                <ul>
+                  <li>View chapter and topic details</li>
+                  <li>Check page numbers in textbook</li>
+                  <li>Access practice suggestions</li>
+                  <li>See homework assignments</li>
+                </ul>
+              </div>
+              
+              <div class="legend-section">
+                <h4>Practical Classes</h4>
+                <ul>
+                  <li>View chapter and experiment details</li>
+                  <li>Check lab manual page numbers</li>
+                  <li>See practice exercises</li>
+                  <li>Access lab report guidelines</li>
+                </ul>
+              </div>
+              
+              <div class="legend-section">
+                <h4>Activities</h4>
+                <ul>
+                  <li>View chapter and activity details</li>
+                  <li>Check participation requirements</li>
+                  <li>See practice suggestions</li>
+                  <li>Access activity materials</li>
+                </ul>
+              </div>
+              
+              <div class="legend-section">
+                <h4>Project Work</h4>
+                <ul>
+                  <li>View chapter and project guidelines</li>
+                  <li>Check milestones and deadlines</li>
+                  <li>See collaboration details</li>
+                  <li>Access project resources</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div style="text-align: center; margin-top: 30px; padding: 20px; color: #6b7280; border-top: 1px solid #e5e7eb;">
+            <p>Downloaded from Student Portal • Date: ${new Date().toLocaleDateString()}</p>
+          </div>
+        </body>
+      </html>
+    `;
+
+    // Create a blob with the HTML content
+    const blob = new Blob([htmlContent], { type: 'text/html' });
     
     // Create download link
     const link = document.createElement('a');
-    link.href = url;
-    link.download = 'class-timetable.pdf';
+    link.href = URL.createObjectURL(blob);
+    link.download = 'class-timetable.html';
+    
+    // Trigger download
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     
     // Clean up the object URL
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
   };
 
   return (
@@ -799,7 +1296,7 @@ startxref
           <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
             Interactive Class Timetable
           </h1>
-          <p className="text-muted-foreground">Click on any subject to view chapter details, topics, and page numbers</p>
+          <p className="text-muted-foreground">Select a subject to see today's lessons by chapter, topic, and page.</p>
           <div className="flex flex-col sm:flex-row gap-4 mt-2 text-sm">
             <Badge variant="outline" className="w-fit">
               <Clock className="h-3 w-3 mr-1" />
@@ -857,11 +1354,11 @@ startxref
                       return (
                         <td key={`${day}-${timeIndex}`} className="p-2">
                           {isBreak ? (
-                            <div className={`rounded-lg border p-3 h-full ${getSubjectColor(classData.type)}`}>
-                              <div className="font-medium text-sm mb-1">
-                                {classData.subject}
-                              </div>
+                          <div className={`rounded-lg border p-3 h-full ${getSubjectColor(classData.type)}`}>
+                            <div className="font-medium text-sm mb-1">
+                              {classData.subject}
                             </div>
+                                </div>
                           ) : (
                             <ClassDetailsDialog 
                               classData={classData} 
@@ -904,7 +1401,7 @@ startxref
                 <p>• Check lab manual page numbers</p>
                 <p>• See practice exercises</p>
                 <p>• Access lab report guidelines</p>
-              </div>
+            </div>
             </div>
             <div className="space-y-3">
               <h4 className="font-semibold text-emerald-600">Activities</h4>
@@ -913,7 +1410,7 @@ startxref
                 <p>• Check participation requirements</p>
                 <p>• See practice suggestions</p>
                 <p>• Access activity materials</p>
-              </div>
+            </div>
             </div>
             <div className="space-y-3">
               <h4 className="font-semibold text-purple-600">Project Work</h4>
@@ -922,7 +1419,7 @@ startxref
                 <p>• Check milestones and deadlines</p>
                 <p>• See collaboration details</p>
                 <p>• Access project resources</p>
-              </div>
+            </div>
             </div>
           </div>
         </CardContent>
