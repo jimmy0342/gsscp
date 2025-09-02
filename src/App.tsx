@@ -39,6 +39,7 @@ import ClassTeacherAIChat from "./components/class-teacher/ClassTeacherAIChat";
 // Admin Components (AI Chat only)
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminAIChat from "./components/admin/AdminAIChat";
+import ContactUs from "./pages/ContactUs";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,7 @@ const App = () => (
             <Route path="fee-collection" element={<FeeCollection />} />
             <Route path="ai-chat" element={<AIChat />} />
             <Route path="notifications" element={<Notifications />} />
+            <Route path="contact" element={<ContactUs />} />
           </Route>
 
           {/* Math Teacher Routes */}

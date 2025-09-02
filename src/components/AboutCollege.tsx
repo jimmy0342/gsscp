@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 import campus from "@/assets/college-campus.jpg";
 import hero from "@/assets/hero-education.jpg";
 import student from "@/assets/student-profile.jpg";
@@ -20,8 +21,14 @@ export default function AboutCollege() {
       <section className="relative">
         <img src={campus} alt="School" className="h-[340px] w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/60" />
+        {/* Top-right Contact button positioned relative to the section */}
+        <div className="absolute top-4 right-4 z-10">
+          <Link to="/contact">
+            <Button className="bg-white text-primary hover:bg-white/90">Contact Us</Button>
+          </Link>
+        </div>
         <div className="absolute inset-0 flex items-end">
-          <div className="max-w-6xl mx-auto w-full px-4 pb-10">
+          <div className="max-w-6xl mx-auto w-full px-4 pb-10 relative">
             <h1 className="text-4xl sm:text-5xl font-extrabold text-white">MACLAY SCHOOL</h1>
             <p className="text-white/90 mt-2 max-w-2xl">Where curiosity meets opportunity. Discover our story, mission and vibrant school life.</p>
             <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
