@@ -770,10 +770,10 @@ Always provide comprehensive, helpful responses based on the document content yo
                             </Button>
                           </div>
                           
-                          <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-2 mt-3 text-xs md:text-xs text-sm text-muted-foreground">
                             <span>{message.timestamp.toLocaleTimeString()}</span>
                             {message.model && (
-                              <Badge variant="outline" className="text-xs">
+                              <Badge variant="outline" className="text-xs md:text-xs text-sm">
                                 {message.model}
                               </Badge>
                             )}
@@ -807,9 +807,9 @@ Always provide comprehensive, helpful responses based on the document content yo
             </ScrollArea>
 
             {/* Input Area - ChatGPT-like Prominent Input */}
-            <div className="border-t p-3 bg-background/50">
+            <div className="border-t p-3 md:p-3 p-4 bg-background/50">
               {/* Input Row: Upload, Text Input, Voice, and Send */}
-              <div className="flex gap-3 w-full max-w-4xl mx-auto">
+              <div className="flex gap-3 md:gap-3 gap-4 w-full max-w-4xl mx-auto">
                 {/* File Upload Button - Left Side */}
                 <div className="relative">
                   <input
@@ -844,7 +844,7 @@ Always provide comprehensive, helpful responses based on the document content yo
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask me anything about your studies..."
-                  className="flex-1 min-h-[40px] max-h-[120px] resize-none border border-border rounded-xl text-base px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  className="flex-1 min-h-[40px] max-h-[120px] md:min-h-[40px] md:max-h-[120px] min-h-[60px] max-h-[200px] resize-none border border-border rounded-xl text-base px-4 py-3 md:px-4 md:py-3 px-6 py-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   disabled={isLoading}
                 />
 
@@ -853,14 +853,14 @@ Always provide comprehensive, helpful responses based on the document content yo
                   type="button"
                   variant={isRecording ? "destructive" : "outline"}
                   size="sm"
-                  className="h-10 w-10 p-0 border border-border rounded-xl hover:bg-orange-600 hover:border-orange-700 transition-colors"
+                  className="h-10 w-10 md:h-10 md:w-10 h-12 w-12 p-0 border border-border rounded-xl hover:bg-orange-600 hover:border-orange-700 transition-colors"
                   onClick={isRecording ? stopRecording : startRecording}
                   title={isRecording ? "Stop recording" : "Start voice recording"}
                 >
                   {isRecording ? (
-                    <MicOff className="h-4 w-4" />
+                    <MicOff className="h-4 w-4 md:h-4 md:w-4 h-5 w-5" />
                   ) : (
-                    <Mic className="h-4 w-4" />
+                    <Mic className="h-4 w-4 md:h-4 md:w-4 h-5 w-5" />
                   )}
                 </Button>
 
@@ -868,12 +868,12 @@ Always provide comprehensive, helpful responses based on the document content yo
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim() || isLoading}
-                  className="px-6 h-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-sm font-medium transition-colors"
+                  className="px-6 h-10 md:px-6 md:h-10 px-8 h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-sm md:text-sm text-base font-medium transition-colors"
                 >
                   {isLoading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 md:h-4 md:w-4 h-5 w-5 animate-spin" />
                   ) : (
-                    <Send className="h-4 w-4" />
+                    <Send className="h-4 w-4 md:h-4 md:w-4 h-5 w-5" />
                   )}
                 </Button>
               </div>
