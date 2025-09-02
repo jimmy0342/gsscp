@@ -729,7 +729,7 @@ Always provide comprehensive, helpful responses based on the document content yo
                         )}
                         
                         <div
-                          className={`max-w-[85%] rounded-xl p-4 relative ${
+                          className={`max-w-[85%] rounded-xl p-6 md:p-4 relative ${
                             message.role === "user"
                               ? "bg-primary text-primary-foreground shadow-sm"
                               : "bg-muted/50 border border-border/50 shadow-sm"
@@ -737,7 +737,7 @@ Always provide comprehensive, helpful responses based on the document content yo
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex-1">
-                              <p className={`text-base leading-relaxed whitespace-pre-wrap ${
+                              <p className={`text-lg md:text-base leading-relaxed whitespace-pre-wrap ${
                                 message.role === "user" ? "text-primary-foreground" : "text-foreground"
                               }`}>
                                 {message.content}
@@ -770,10 +770,10 @@ Always provide comprehensive, helpful responses based on the document content yo
                             </Button>
                           </div>
                           
-                          <div className="flex items-center gap-2 mt-3 text-xs md:text-xs text-sm text-muted-foreground">
+                          <div className="flex items-center gap-2 mt-3 text-sm md:text-xs text-muted-foreground">
                             <span>{message.timestamp.toLocaleTimeString()}</span>
                             {message.model && (
-                              <Badge variant="outline" className="text-xs md:text-xs text-sm">
+                              <Badge variant="outline" className="text-sm md:text-xs">
                                 {message.model}
                               </Badge>
                             )}
@@ -807,10 +807,9 @@ Always provide comprehensive, helpful responses based on the document content yo
             </ScrollArea>
 
             {/* Input Area - ChatGPT-like Prominent Input */}
-            <div className="border-t p-3 md:p-3 p-4 bg-background/50">
-              {/* Input Row: Upload, Text Input, Voice, and Send */}
-              <div className="flex gap-3 md:gap-3 gap-4 w-full max-w-4xl mx-auto">
-                {/* File Upload Button - Left Side */}
+            <div className="border-t p-4 md:p-3 bg-background/50">
+              {/* Desktop layout (unchanged) */}
+              <div className="hidden md:flex gap-3 w-full max-w-4xl mx-auto">
                 <div className="relative">
                   <input
                     type="file"
@@ -837,48 +836,117 @@ Always provide comprehensive, helpful responses based on the document content yo
                   </Button>
                 </div>
 
-                {/* Text Input - Center */}
                 <Textarea
                   ref={textareaRef}
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask me anything about your studies..."
-                  className="flex-1 min-h-[40px] max-h-[120px] md:min-h-[40px] md:max-h-[120px] min-h-[60px] max-h-[200px] resize-none border border-border rounded-xl text-base px-4 py-3 md:px-4 md:py-3 px-6 py-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  className="flex-1 md:min-h-[40px] md:max-h-[120px] resize-none border border-border rounded-xl md:text-base md:px-4 md:py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   disabled={isLoading}
                 />
 
-                {/* Voice Recording Button - Right Side */}
                 <Button
                   type="button"
                   variant={isRecording ? "destructive" : "outline"}
                   size="sm"
-                  className="h-10 w-10 md:h-10 md:w-10 h-12 w-12 p-0 border border-border rounded-xl hover:bg-orange-600 hover:border-orange-700 transition-colors"
+                  className="md:h-10 md:w-10 p-0 border border-border rounded-xl hover:bg-orange-600 hover:border-orange-700 transition-colors"
                   onClick={isRecording ? stopRecording : startRecording}
                   title={isRecording ? "Stop recording" : "Start voice recording"}
                 >
-                  {isRecording ? (
-                    <MicOff className="h-4 w-4 md:h-4 md:w-4 h-5 w-5" />
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : isRecording ? (
+                    <MicOff className="h-4 w-4" />
                   ) : (
-                    <Mic className="h-4 w-4 md:h-4 md:w-4 h-5 w-5" />
+                    <Mic className="h-4 w-4" />
                   )}
                 </Button>
 
-                {/* Send Button - Right Side */}
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim() || isLoading}
-                  className="px-6 h-10 md:px-6 md:h-10 px-8 h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-sm md:text-sm text-base font-medium transition-colors"
+                  className="md:px-6 md:h-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl md:text-sm font-medium transition-colors"
                 >
                   {isLoading ? (
-                    <Loader2 className="h-4 w-4 md:h-4 md:w-4 h-5 w-5 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <Send className="h-4 w-4 md:h-4 md:w-4 h-5 w-5" />
+                    <Send className="h-4 w-4" />
                   )}
                 </Button>
               </div>
-              
-              <p className="text-xs text-muted-foreground mt-3 text-center">
+
+              {/* Mobile layout */}
+              <div className="flex md:hidden flex-col gap-4 w-full max-w-4xl mx-auto">
+                <Textarea
+                  ref={textareaRef}
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Ask me anything about your studies..."
+                  className="w-full min-h-[60px] max-h-[200px] resize-none border border-border rounded-xl text-base px-6 py-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  disabled={isLoading}
+                />
+
+                <div className="flex items-center justify-end gap-4">
+                  <div className="relative">
+                    <input
+                      type="file"
+                      id="file-upload"
+                      className="hidden"
+                      onChange={handleFileUpload}
+                      accept="image/*,.pdf,.doc,.docx,.txt,.readme,.md,.xlsx,.xls"
+                      multiple={false}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-12 w-12 p-0 border border-border rounded-xl hover:bg-orange-600 hover:border-orange-700 transition-colors"
+                      title="Upload file"
+                      onClick={() => {
+                        const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+                        if (fileInput) {
+                          fileInput.click();
+                        }
+                      }}
+                    >
+                      <Plus className="h-5 w-5" />
+                    </Button>
+                  </div>
+
+                  <Button
+                    type="button"
+                    variant={isRecording ? "destructive" : "outline"}
+                    size="sm"
+                    className="h-12 w-12 p-0 border border-border rounded-xl hover:bg-orange-600 hover:border-orange-700 transition-colors"
+                    onClick={isRecording ? stopRecording : startRecording}
+                    title={isRecording ? "Stop recording" : "Start voice recording"}
+                  >
+                    {isLoading ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : isRecording ? (
+                      <MicOff className="h-5 w-5" />
+                    ) : (
+                      <Mic className="h-5 w-5" />
+                    )}
+                  </Button>
+
+                  <Button
+                    onClick={handleSendMessage}
+                    disabled={!inputMessage.trim() || isLoading}
+                    className="px-8 h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-base font-medium transition-colors"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <Send className="h-5 w-5" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              <p className="text-sm md:text-xs text-muted-foreground mt-3 text-center">
                 Press Enter to send, Shift+Enter for new line • Click + to upload images, documents, or files • Click 🎤 for voice input
               </p>
             </div>
