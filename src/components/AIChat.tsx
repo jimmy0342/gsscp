@@ -34,6 +34,7 @@ import {
   MicOff
 } from "lucide-react";
 import { toast } from "sonner";
+import { chatStorage, ChatMessage } from "@/utils/chatStorage";
 
 interface Message {
   id: string;
@@ -290,6 +291,18 @@ Always provide comprehensive, helpful responses based on the document content yo
       };
 
       setMessages(prev => [...prev, assistantMessage]);
+
+      // Save chat to storage for AI Chat Info dashboard
+      const chatMessage: ChatMessage = {
+        id: Date.now().toString(),
+        userType: 'student',
+        userName: 'Student',
+        time: new Date().toLocaleString(),
+        model: aiModels.find(m => m.id === selectedModel)?.name || 'Unknown',
+        prompt: inputMessage,
+        aiResponse: data.choices[0]?.message?.content || "Sorry, I couldn't generate a response."
+      };
+      chatStorage.saveChat(chatMessage);
     } catch (error) {
       console.error("Error sending message:", error);
       

@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import {
   User,
   Calculator,
-  Brain,
   ArrowRight,
   BookOpen,
   Users,
-  Shield
+  Shield,
+  MessageSquare
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -65,10 +65,10 @@ export default function Home() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 rounded-full bg-primary/10">
-              <Brain className="h-8 w-8 text-primary" />
-            </div>
+                     <div className="flex items-center justify-center gap-3 mb-4">
+             <div className="p-3 rounded-full bg-primary/10">
+               <User className="h-8 w-8 text-primary" />
+             </div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
               AI-Powered Education Hub
             </h1>
@@ -118,12 +118,27 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Footer */}
-        <div className="text-center mt-12 pt-8 border-t">
-          <p className="text-muted-foreground">
-            Each panel is equipped with AI-powered features to enhance your educational experience and productivity.
-          </p>
-        </div>
+                                                                             {/* AI Chat Info Dashboard */}
+                     <div className="text-center mt-12 pt-8 border-t">
+                       <div className="mb-6">
+                         <h2 className="text-2xl font-bold text-primary mb-4">AI Chat Info Dashboard</h2>
+                         <p className="text-muted-foreground mb-4">
+                           Track and monitor daily AI chat interactions across all user types
+                         </p>
+                         <Button asChild size="lg" className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90">
+                           <Link to="/ai-chat-info">
+                             <MessageSquare className="h-5 w-5 mr-2" />
+                             View AI Chat Tracker
+                           </Link>
+                         </Button>
+                       </div>
+                       
+                       <div className="border-t pt-8">
+                         <p className="text-muted-foreground">
+                           Each panel is equipped with AI-powered features to enhance your educational experience and productivity.
+                         </p>
+                       </div>
+                     </div>
       </div>
     </div>
   );

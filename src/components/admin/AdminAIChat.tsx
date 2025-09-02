@@ -34,6 +34,7 @@ import {
   MicOff
 } from "lucide-react";
 import { toast } from "sonner";
+import { chatStorage, ChatMessage } from "@/utils/chatStorage";
 
 interface Message {
   id: string;
@@ -64,15 +65,6 @@ interface AIModel {
 }
 
 const aiModels: AIModel[] = [
-  {
-    id: "system-ai-model",
-    name: "System AI Model",
-    provider: "Custom",
-    description: "Specialized AI with predefined functionality for Administrators",
-    isFree: true,
-    maxTokens: 4000,
-    capabilities: ["Specialized Functions", "Predefined Responses", "Role-Specific Assistance"]
-  },
   {
     id: "openai/gpt-4o-mini",
     name: "ChatGPT",
@@ -116,7 +108,7 @@ const OPENROUTER_API_KEY = "sk-or-v1-099f0d3153926f385edadfbb488520f6f7356a17eaa
 export default function AIChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
-  const [selectedModel, setSelectedModel] = useState("system-ai-model");
+  const [selectedModel, setSelectedModel] = useState("openai/gpt-4o-mini");
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
@@ -299,6 +291,19 @@ Always provide comprehensive, helpful responses based on the document content yo
       };
 
       setMessages(prev => [...prev, assistantMessage]);
+
+      // Save chat to storage for AI Chat Info dashboard
+      const chatMessage: ChatMessage = {
+        id: Date.now().toString(),
+        userType: 'admin',
+        userName: 'Admin',
+        userInfo: 'General Administration',
+        time: new Date().toLocaleString(),
+        model: aiModels.find(m => m.id === selectedModel)?.name || 'Unknown',
+        prompt: inputMessage,
+        aiResponse: data.choices[0]?.message?.content || "Sorry, I couldn't generate a response."
+      };
+      chatStorage.saveChat(chatMessage);
     } catch (error) {
       console.error("Error sending message:", error);
       

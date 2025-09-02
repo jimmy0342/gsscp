@@ -17,6 +17,13 @@ import Notifications from "./components/Notifications";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 
+// AI Chat Info Pages
+import AIChatInfo from "./pages/AIChatInfo";
+import StudentAIChatTracker from "./pages/ai-chat-info/StudentAIChatTracker";
+import SubjectTeacherAIChatTracker from "./pages/ai-chat-info/SubjectTeacherAIChatTracker";
+import ClassTeacherAIChatTracker from "./pages/ai-chat-info/ClassTeacherAIChatTracker";
+import AdminAIChatTracker from "./pages/ai-chat-info/AdminAIChatTracker";
+
 // Math Teacher Components
 import MathTeacherLayout from "./components/subject-teacher/MathTeacherLayout";
 import MathTeacherTimetableChat from "./components/subject-teacher/MathTeacherTimetableChat";
@@ -44,6 +51,13 @@ const App = () => (
         <Routes>
           {/* Home Page */}
           <Route path="/home" element={<Home />} />
+
+          {/* AI Chat Info Routes */}
+          <Route path="/ai-chat-info" element={<AIChatInfo />} />
+          <Route path="/ai-chat-info/student" element={<StudentAIChatTracker />} />
+          <Route path="/ai-chat-info/subject-teacher" element={<SubjectTeacherAIChatTracker />} />
+          <Route path="/ai-chat-info/class-teacher" element={<ClassTeacherAIChatTracker />} />
+          <Route path="/ai-chat-info/admin" element={<AdminAIChatTracker />} />
 
           {/* Student Routes */}
           <Route path="/" element={<Layout />}>
