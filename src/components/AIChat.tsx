@@ -113,6 +113,7 @@ export default function AIChat() {
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("General");
@@ -181,6 +182,11 @@ export default function AIChat() {
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
+
+    if (!hasInteracted) {
+      setHasInteracted(true);
+      toast.success("Chat layout adjusted for first prompt");
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -636,7 +642,7 @@ Always provide comprehensive, helpful responses based on the document content yo
 
         <TabsContent value="chat" className="space-y-6">
           {/* ChatGPT-like Chat Interface - Compact and Page-Friendly */}
-          <Card className="bg-gradient-card shadow-card h-[450px] flex flex-col w-full">
+          <Card className={`bg-gradient-card shadow-card flex flex-col w-full ${hasInteracted ? 'h-[70vh]' : ''}`}>
             {/* Features/Controls Area - Moved to Top */}
             <div className="border-b p-3 bg-gray-50">
               <div className="flex items-center justify-between gap-3">
@@ -704,15 +710,9 @@ Always provide comprehensive, helpful responses based on the document content yo
             </div>
 
             {/* Messages Area - ChatGPT-like Layout */}
-            <ScrollArea ref={scrollAreaRef} className="flex-1 p-3">
-              <div className="space-y-4 max-w-4xl mx-auto">
-                {messages.length === 0 ? (
-                  <div className="text-center py-12">
-                    <Bot className="h-12 w-12 mx-auto mb-3 text-muted-foreground/50" />
-                    <h3 className="text-base font-medium text-muted-foreground mb-2">How can I help you today?</h3>
-                    <p className="text-sm text-muted-foreground">Ask me anything about your studies, and I'll help you learn!</p>
-                  </div>
-                ) : (
+            {hasInteracted && messages.length > 0 && (
+              <ScrollArea ref={scrollAreaRef} className="flex-1 p-3">
+                <div className="space-y-4 max-w-4xl mx-auto">
                   <>
                     {messages.map((message, index) => (
                       <div
@@ -787,9 +787,8 @@ Always provide comprehensive, helpful responses based on the document content yo
                       </div>
                     ))}
                   </>
-                )}
                 
-                {isLoading && (
+                  {isLoading && (
                   <div className="flex gap-4 justify-start">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                       <Bot className="h-4 w-4 text-primary" />
@@ -801,9 +800,10 @@ Always provide comprehensive, helpful responses based on the document content yo
                       </div>
                     </div>
                   </div>
-                )}
-              </div>
-            </ScrollArea>
+                  )}
+                </div>
+              </ScrollArea>
+            )}
 
             {/* Input Area - ChatGPT-like Prominent Input */}
             <div className="border-t p-4 md:p-3 bg-background/50">
