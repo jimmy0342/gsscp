@@ -18,7 +18,7 @@ import {
 
 const navigation = [
   { name: "Profile", href: "/profile", icon: User },
-  { name: "About College", href: "/about", icon: GraduationCap },
+  { name: "About School", href: "/about", icon: GraduationCap },
   { name: "Performance", href: "/performance", icon: BarChart3 },
   { name: "Timetable", href: "/timetable", icon: Calendar },
   { name: "Notes", href: "/notes", icon: BookOpen },

@@ -27,6 +27,13 @@ export default function ContactUs() {
 
   return (
     <div className="p-6 space-y-6 animate-fade-in">
+      {/* Contact Us Button - Top Right Corner */}
+      <div className="fixed top-4 right-4 z-50">
+        <Button className="bg-blue-600 text-white hover:bg-blue-700 px-6 py-3 rounded-lg shadow-lg">
+          Contact Us
+        </Button>
+      </div>
+      
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">Contact Us</h1>
         <p className="text-muted-foreground">Reach out to your Subject Teacher, Class Teacher, or Admin</p>

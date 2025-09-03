@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import campus from "@/assets/college-campus.jpg";
 import hero from "@/assets/hero-education.jpg";
 import student from "@/assets/student-profile.jpg";
+import introVideo from "@/assets/intro.mp4";
 
 const Stat = ({ label, value }: { label: string; value: string }) => (
   <div className="text-center">
@@ -29,7 +30,7 @@ export default function AboutCollege() {
         </div>
         <div className="absolute inset-0 flex items-end">
           <div className="max-w-6xl mx-auto w-full px-4 pb-10 relative">
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-white">MACLAY SCHOOL</h1>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-white">BLUE ESTATE SCHOOL</h1>
             <p className="text-white/90 mt-2 max-w-2xl">Where curiosity meets opportunity. Discover our story, mission and vibrant school life.</p>
             <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
@@ -143,13 +144,15 @@ export default function AboutCollege() {
         <div className="grid md:grid-cols-3 gap-6">
           <Card className="overflow-hidden md:col-span-2">
             <div className="relative pb-[56.25%] h-0">
-              <iframe
-                className="absolute inset-0 h-full w-full"
-                src="https://www.youtube.com/embed/pMzGDBP6Bic"
-                title="School Life Reel"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
+              <video
+                className="absolute inset-0 h-full w-full object-cover"
+                controls
+                preload="metadata"
+                poster={campus}
+              >
+                <source src={introVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
             <CardContent className="p-4">
               <div className="font-semibold">School Life Reel</div>
@@ -184,7 +187,7 @@ export default function AboutCollege() {
                   <img src={student} alt={name} className="h-10 w-10 rounded-full object-cover" />
                   <div>
                     <div className="font-medium">{name}</div>
-                    <p className="text-sm text-muted-foreground mt-1">“Inspirational faculty and supportive peers helped me discover my path.”</p>
+                    <p className="text-sm text-muted-foreground mt-1">"Inspirational faculty and supportive peers helped me discover my path."</p>
                   </div>
                 </div>
               </CardContent>
