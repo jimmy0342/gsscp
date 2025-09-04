@@ -1289,15 +1289,15 @@ export default function Timetable() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-subtle p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-subtle p-4 sm:p-6 space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
             Interactive Class Timetable
           </h1>
-          <p className="text-muted-foreground">Select a subject to see today's lessons by chapter, topic, and page.</p>
-          <div className="flex flex-col sm:flex-row gap-4 mt-2 text-sm">
+          <p className="text-sm sm:text-base text-muted-foreground">Select a subject to see today's lessons by chapter, topic, and page.</p>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-2 text-xs sm:text-sm">
             <Badge variant="outline" className="w-fit">
               <Clock className="h-3 w-3 mr-1" />
               January 2025 - Week 3
@@ -1333,9 +1333,9 @@ export default function Timetable() {
             <table className="w-full">
               <thead>
                 <tr className="border-b bg-muted/30">
-                  <th className="text-left p-4 font-medium min-w-[120px]">Time</th>
+                  <th className="text-left p-3 sm:p-4 font-medium min-w-[120px]">Time</th>
                   {weekDays.map((day) => (
-                    <th key={day} className="text-left p-4 font-medium min-w-[200px]">
+                    <th key={day} className="text-left p-3 sm:p-4 font-medium min-w-[160px] sm:min-w-[200px]">
                       {day}
                     </th>
                   ))}
@@ -1344,7 +1344,7 @@ export default function Timetable() {
               <tbody>
                 {timeSlots.map((time, timeIndex) => (
                   <tr key={time} className="border-b hover:bg-muted/20 transition-colors">
-                    <td className="p-4 font-medium text-sm bg-muted/10">
+                    <td className="p-3 sm:p-4 font-medium text-xs sm:text-sm bg-muted/10">
                       {time}
                     </td>
                     {weekDays.map((day) => {
@@ -1355,7 +1355,7 @@ export default function Timetable() {
                         <td key={`${day}-${timeIndex}`} className="p-2">
                           {isBreak ? (
                           <div className={`rounded-lg border p-3 h-full ${getSubjectColor(classData.type)}`}>
-                            <div className="font-medium text-sm mb-1">
+                            <div className="font-medium text-xs sm:text-sm mb-1">
                               {classData.subject}
                             </div>
                                 </div>

@@ -366,17 +366,17 @@ startxref
   const totalNotes = Object.values(notesData).reduce((total, subjectNotes) => total + subjectNotes.length, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-subtle p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-subtle p-4 sm:p-6 space-y-6">
       {/* Header */}
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+      <div className="text-center space-y-1 sm:space-y-2">
+        <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
           Study Notes
         </h1>
-        <p className="text-muted-foreground">Access your subject-wise study materials and notes</p>
+        <p className="text-sm sm:text-base text-muted-foreground">Access your subject-wise study materials and notes</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
         <Card className="bg-card/80 backdrop-blur-sm border shadow-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -423,7 +423,7 @@ startxref
       {/* Search and Filter */}
       <Card className="bg-card/80 backdrop-blur-sm border shadow-card">
         <CardContent className="p-4">
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -435,7 +435,7 @@ startxref
             </div>
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Filter by subject</span>
+              <span className="text-xs sm:text-sm text-muted-foreground">Filter by subject</span>
             </div>
           </div>
         </CardContent>
@@ -445,7 +445,7 @@ startxref
       <Tabs value={selectedSubject} onValueChange={setSelectedSubject}>
         <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-6">
           {subjects.map((subject) => (
-            <TabsTrigger key={subject} value={subject} className="text-xs">
+            <TabsTrigger key={subject} value={subject} className="text-[11px] sm:text-xs">
               {subject.replace(" Science", "").replace("Computer", "CS")}
             </TabsTrigger>
           ))}
@@ -453,12 +453,12 @@ startxref
 
         {subjects.map((subject) => (
           <TabsContent key={subject} value={subject} className="space-y-4 mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {filteredNotes.map((note, index) => (
                 <Card key={index} className="bg-card/80 backdrop-blur-sm border shadow-card hover:shadow-elegant transition-all duration-300 hover-scale">
                   <CardHeader>
-                    <CardTitle className="text-lg leading-tight">{note.title}</CardTitle>
-                    <CardDescription className="text-sm">{note.description}</CardDescription>
+                    <CardTitle className="text-base sm:text-lg leading-tight">{note.title}</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">{note.description}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
@@ -470,7 +470,7 @@ startxref
                     </div>
                     
                     <div className="mb-3">
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-[11px] sm:text-xs">
                         {note.topic}
                       </Badge>
                     </div>

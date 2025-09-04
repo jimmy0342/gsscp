@@ -133,7 +133,7 @@ export default function Notifications() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {/* Total Teacher Advice Card */}
         <Card className="bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
           <CardContent className="p-2 text-center">
@@ -142,17 +142,6 @@ export default function Notifications() {
             </div>
             <h3 className="text-xs font-semibold text-gray-800 mb-1">Total Teacher Advice</h3>
             <p className="text-lg font-bold text-gray-800">{teacherAdvice.length}</p>
-          </CardContent>
-        </Card>
-
-        {/* School Notifications Card */}
-        <Card className="bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
-          <CardContent className="p-2 text-center">
-            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-1">
-              <Bell className="h-4 w-4 text-green-600" />
-            </div>
-            <h3 className="text-xs font-semibold text-gray-800 mb-1">School Notifications</h3>
-            <p className="text-lg font-bold text-gray-800">{schoolNotifications.length}</p>
           </CardContent>
         </Card>
 
@@ -171,6 +160,17 @@ export default function Notifications() {
             <p className="text-lg font-bold text-gray-800">
               {schoolNotifications.filter(n => n.urgent).length}
             </p>
+          </CardContent>
+        </Card>
+
+        {/* School Notifications Card */}
+        <Card className="bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300 col-span-2 md:col-auto">
+          <CardContent className="p-2 text-center">
+            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-1">
+              <Bell className="h-4 w-4 text-green-600" />
+            </div>
+            <h3 className="text-xs font-semibold text-gray-800 mb-1">School Notifications</h3>
+            <p className="text-lg font-bold text-gray-800">{schoolNotifications.length}</p>
           </CardContent>
         </Card>
       </div>
@@ -244,52 +244,7 @@ export default function Notifications() {
         </Card>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-gradient-card shadow-card">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-primary/10">
-                <MessageSquare className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Total Teacher Advice</p>
-                <p className="text-2xl font-bold">{teacherAdvice.length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-gradient-card shadow-card">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-secondary/10">
-                <Bell className="h-5 w-5 text-secondary" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">School Notifications</p>
-                <p className="text-2xl font-bold">{schoolNotifications.length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-gradient-card shadow-card">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-destructive/10">
-                <AlertCircle className="h-5 w-5 text-destructive" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Urgent Items</p>
-                <p className="text-2xl font-bold">
-                  {schoolNotifications.filter(n => n.urgent).length}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+
     </div>
   );
 }

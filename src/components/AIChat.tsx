@@ -645,7 +645,8 @@ Always provide comprehensive, helpful responses based on the document content yo
           <Card className={`bg-gradient-card shadow-card flex flex-col w-full ${hasInteracted ? 'h-[70vh]' : ''}`}>
             {/* Features/Controls Area - Moved to Top */}
             <div className="border-b p-3 bg-gray-50">
-              <div className="flex items-center justify-between gap-3">
+              {/* Desktop Layout */}
+              <div className="hidden md:flex items-center justify-between gap-3">
                 {/* Left Side: Model Selection */}
                 <Select value={selectedModel} onValueChange={setSelectedModel}>
                   <SelectTrigger className="w-40 h-7">
@@ -705,6 +706,68 @@ Always provide comprehensive, helpful responses based on the document content yo
                       Export
                     </Button>
                   </div>
+                </div>
+              </div>
+
+              {/* Mobile Layout */}
+              <div className="md:hidden space-y-3">
+                {/* Top Row: Model and Category */}
+                <div className="flex items-center gap-2">
+                  <Select value={selectedModel} onValueChange={setSelectedModel}>
+                    <SelectTrigger className="flex-1 h-8">
+                      <SelectValue placeholder="Select AI Model" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {aiModels.map((model) => (
+                        <SelectItem key={model.id} value={model.id}>
+                          <div className="flex items-center gap-2">
+                            <span>{model.name}</span>
+                            {model.isFree && (
+                              <Badge variant="secondary" className="text-xs">Pro</Badge>
+                            )}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                    <SelectTrigger className="flex-1 h-8">
+                      <SelectValue placeholder="Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {studyCategories.map((category) => (
+                        <SelectItem key={category.name} value={category.name}>
+                          <div className="flex items-center gap-2">
+                            <category.icon className={`h-3 w-3 ${category.color}`} />
+                            {category.name}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Bottom Row: Chat Controls */}
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={clearChat}
+                    className="flex-1 h-8 text-xs"
+                  >
+                    <RefreshCw className="h-3 w-3 mr-2" />
+                    Clear Chat
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={exportChat}
+                    className="flex-1 h-8 text-xs"
+                  >
+                    <Download className="h-3 w-3 mr-2" />
+                    Export Chat
+                  </Button>
                 </div>
               </div>
             </div>

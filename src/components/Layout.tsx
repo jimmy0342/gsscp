@@ -13,7 +13,8 @@ import {
   Brain,
   Menu,
   X,
-  Bell
+  Bell,
+  MessageSquare
 } from "lucide-react";
 
 const navigation = [
@@ -40,7 +41,7 @@ export default function Layout() {
         <div className="fixed inset-0 bg-black/20" onClick={() => setSidebarOpen(false)} />
         <div className="fixed left-0 top-0 h-full w-64 bg-card shadow-elegant">
           <div className="flex h-16 items-center justify-between px-4 border-b">
-            <span className="text-lg font-semibold bg-gradient-primary bg-clip-text text-transparent">
+            <span className="text-base font-semibold bg-gradient-primary bg-clip-text text-transparent">
               AI-Powered Edu
             </span>
             <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
@@ -115,8 +116,8 @@ export default function Layout() {
                 <Menu className="h-5 w-5" />
               </Button>
               <div className="flex items-center gap-4">
-                <div className="text-sm text-muted-foreground">
-                  Welcome back, Sarah Johnson !
+                <div className="text-xs sm:text-sm text-muted-foreground truncate max-w-[60vw] sm:max-w-none">
+                  Welcome back, Sarah Johnson!
                 </div>
               </div>
             </div>

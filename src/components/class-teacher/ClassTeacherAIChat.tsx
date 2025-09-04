@@ -646,7 +646,8 @@ Always provide comprehensive, helpful responses based on the document content yo
           <Card className={`bg-gradient-card shadow-card flex flex-col w-full ${hasInteracted ? 'h-[70vh]' : ''}`}>
             {/* Features/Controls Area - Moved to Top */}
             <div className="border-b p-3 bg-gray-50">
-              <div className="flex items-center justify-between gap-3">
+              {/* Desktop Layout */}
+              <div className="hidden md:flex items-center justify-between gap-3">
                 {/* Left Side: Model Selection */}
                 <Select value={selectedModel} onValueChange={setSelectedModel}>
                   <SelectTrigger className="w-40 h-7">
@@ -708,6 +709,68 @@ Always provide comprehensive, helpful responses based on the document content yo
                   </div>
                 </div>
               </div>
+
+              {/* Mobile Layout */}
+              <div className="md:hidden space-y-3">
+                {/* Top Row: Model and Category */}
+                <div className="flex items-center gap-2">
+                  <Select value={selectedModel} onValueChange={setSelectedModel}>
+                    <SelectTrigger className="flex-1 h-8">
+                      <SelectValue placeholder="Select AI Model" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {aiModels.map((model) => (
+                        <SelectItem key={model.id} value={model.id}>
+                          <div className="flex items-center gap-2">
+                            <span>{model.name}</span>
+                            {model.isFree && (
+                              <Badge variant="secondary" className="text-xs">Pro</Badge>
+                            )}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                    <SelectTrigger className="flex-1 h-8">
+                      <SelectValue placeholder="Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {studyCategories.map((category) => (
+                        <SelectItem key={category.name} value={category.name}>
+                          <div className="flex items-center gap-2">
+                            <category.icon className={`h-3 w-3 ${category.color}`} />
+                            {category.name}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Bottom Row: Chat Controls */}
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={clearChat}
+                    className="flex-1 h-8 text-xs"
+                  >
+                    <RefreshCw className="h-3 w-3 mr-2" />
+                    Clear Chat
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={exportChat}
+                    className="flex-1 h-8 text-xs"
+                  >
+                    <Download className="h-3 w-3 mr-2" />
+                    Export Chat
+                  </Button>
+                </div>
+              </div>
             </div>
 
             {/* Messages Area - ChatGPT-like Layout */}
@@ -729,15 +792,13 @@ Always provide comprehensive, helpful responses based on the document content yo
                         )}
                         
                         <div
-                          className={`max-w-[85%] rounded-xl p-6 md:p-4 relative ${
-                            message.role === "user"
-                              ? "bg-primary text-primary-foreground shadow-sm"
-                              : "bg-muted/50 border border-border/50 shadow-sm"
+                          className={`max-w-[85%] rounded-xl p-4 sm:p-6 relative ${
+                            message.role === "user" ? "bg-primary text-primary-foreground shadow-sm" : "bg-muted/50 border border-border/50 shadow-sm"
                           }`}
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex-1">
-                              <p className={`text-lg md:text-base leading-relaxed whitespace-pre-wrap ${
+                              <p className={`text-base sm:text-lg leading-relaxed whitespace-pre-wrap ${
                                 message.role === "user" ? "text-primary-foreground" : "text-foreground"
                               }`}>
                                 {message.content}
@@ -750,7 +811,7 @@ Always provide comprehensive, helpful responses based on the document content yo
                                     src={message.image} 
                                     alt="Uploaded content"
                                     className="max-w-full h-auto rounded-lg border border-border/30 shadow-sm"
-                                    style={{ maxHeight: '300px' }}
+                                    style={{ maxHeight: '250px' }}
                                   />
                                 </div>
                               )}
@@ -770,10 +831,10 @@ Always provide comprehensive, helpful responses based on the document content yo
                             </Button>
                           </div>
                           
-                          <div className="flex items-center gap-2 mt-3 text-sm md:text-xs text-muted-foreground">
+                          <div className="flex items-center gap-2 mt-3 text-xs sm:text-sm text-muted-foreground">
                             <span>{message.timestamp.toLocaleTimeString()}</span>
                             {message.model && (
-                              <Badge variant="outline" className="text-sm md:text-xs">
+                              <Badge variant="outline" className="text-xs">
                                 {message.model}
                               </Badge>
                             )}
@@ -877,71 +938,74 @@ Always provide comprehensive, helpful responses based on the document content yo
               </div>
 
               {/* Mobile layout */}
-              <div className="flex md:hidden flex-col gap-4 w-full max-w-4xl mx-auto">
+              <div className="md:hidden space-y-3">
                 <Textarea
                   ref={textareaRef}
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask me anything about your studies..."
-                  className="w-full min-h-[60px] max-h-[200px] resize-none border border-border rounded-xl text-base px-6 py-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  className="w-full min-h-[80px] max-h-[200px] resize-none border border-border rounded-xl text-base px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   disabled={isLoading}
                 />
 
-                <div className="flex items-center justify-end gap-4">
-                  <div className="relative">
-                    <input
-                      type="file"
-                      id="file-upload"
-                      className="hidden"
-                      onChange={handleFileUpload}
-                      accept="image/*,.pdf,.doc,.docx,.txt,.readme,.md,.xlsx,.xls"
-                      multiple={false}
-                    />
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="relative">
+                      <input
+                        type="file"
+                        id="file-upload-mobile"
+                        className="hidden"
+                        onChange={handleFileUpload}
+                        accept="image/*,.pdf,.doc,.docx,.txt,.readme,.md,.xlsx,.xls"
+                        multiple={false}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="h-10 w-10 p-0 border border-border rounded-lg hover:bg-orange-600 hover:border-orange-700 transition-colors"
+                        title="Upload file"
+                        onClick={() => {
+                          const fileInput = document.getElementById('file-upload-mobile') as HTMLInputElement;
+                          if (fileInput) {
+                            fileInput.click();
+                          }
+                        }}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+
                     <Button
                       type="button"
-                      variant="outline"
+                      variant={isRecording ? "destructive" : "outline"}
                       size="sm"
-                      className="h-12 w-12 p-0 border border-border rounded-xl hover:bg-orange-600 hover:border-orange-700 transition-colors"
-                      title="Upload file"
-                      onClick={() => {
-                        const fileInput = document.getElementById('file-upload') as HTMLInputElement;
-                        if (fileInput) {
-                          fileInput.click();
-                        }
-                      }}
+                      className="h-10 w-10 p-0 border border-border rounded-lg hover:bg-orange-600 hover:border-orange-700 transition-colors"
+                      onClick={isRecording ? stopRecording : startRecording}
+                      title={isRecording ? "Stop recording" : "Start voice recording"}
                     >
-                      <Plus className="h-5 w-5" />
+                      {isLoading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : isRecording ? (
+                        <MicOff className="h-4 w-4" />
+                      ) : (
+                        <Mic className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
 
                   <Button
-                    type="button"
-                    variant={isRecording ? "destructive" : "outline"}
-                    size="sm"
-                    className="h-12 w-12 p-0 border border-border rounded-xl hover:bg-orange-600 hover:border-orange-700 transition-colors"
-                    onClick={isRecording ? stopRecording : startRecording}
-                    title={isRecording ? "Stop recording" : "Start voice recording"}
-                  >
-                    {isLoading ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : isRecording ? (
-                      <MicOff className="h-5 w-5" />
-                    ) : (
-                      <Mic className="h-5 w-5" />
-                    )}
-                  </Button>
-
-                  <Button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim() || isLoading}
-                    className="px-8 h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-base font-medium transition-colors"
+                    className="px-6 h-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-sm font-medium transition-colors flex-1 max-w-[120px]"
                   >
                     {isLoading ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
                     ) : (
-                      <Send className="h-5 w-5" />
+                      <Send className="h-4 w-4 mr-2" />
                     )}
+                    Send
                   </Button>
                 </div>
               </div>

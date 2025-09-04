@@ -125,35 +125,35 @@ const schoolNotifications = [
 
 export default function StudentProfile() {
   return (
-    <div className="p-6 space-y-8 animate-fade-in">
+    <div className="p-4 sm:p-6 space-y-6 sm:space-y-8 animate-fade-in">
       {/* Header */}
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+      <div className="text-center space-y-1 sm:space-y-2">
+        <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
           Student Profile
         </h1>
-        <p className="text-muted-foreground">View your personal and academic information</p>
+        <p className="text-sm sm:text-base text-muted-foreground">View your personal and academic information</p>
       </div>
 
       {/* Profile Overview */}
       <Card className="bg-gradient-card shadow-elegant">
-        <CardContent className="p-8">
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+        <CardContent className="p-4 sm:p-8">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-8">
             <div className="relative">
               <img
                 src={studentData.profileImage}
                 alt={studentData.fullName}
-                className="w-32 h-32 rounded-full object-cover shadow-primary"
+                className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover shadow-primary"
               />
               <Badge 
                 variant={studentData.status === "Active" ? "default" : "secondary"}
-                className="absolute -bottom-2 -right-2"
+                className="absolute -bottom-2 -right-2 text-[10px] sm:text-xs"
               >
                 {studentData.status}
               </Badge>
             </div>
             <div className="flex-1 text-center md:text-left">
-              <h2 className="text-3xl font-bold mb-2">{studentData.fullName}</h2>
-              <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">{studentData.fullName}</h2>
+              <div className="flex flex-col md:flex-row md:items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
                 <Badge variant="secondary" className="text-sm">
                   {studentData.class} - Section {studentData.section}
                 </Badge>
@@ -164,15 +164,15 @@ export default function StudentProfile() {
                   ID: {studentData.studentId}
                 </Badge>
               </div>
-              <p className="text-muted-foreground mb-4">
+              <p className="text-sm sm:text-base text-muted-foreground mb-3 sm:mb-4">
                 Enrolled since {studentData.enrollmentYear} • Admission No. {studentData.admissionNumber}
               </p>
               <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                <Button variant="default" size="sm" onClick={() => { window.location.href = 'tel:+15559876543'; }}>
+                <Button variant="default" size="sm" className="w-full xs:w-auto sm:w-auto" onClick={() => { window.location.href = 'tel:+15559876543'; }}>
                   <Phone className="mr-2 h-4 w-4" />
                   Call
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => { window.location.href = 'mailto:SarahJohnsonStudIDSTU2024001@gmail.com'; }}>
+                <Button variant="outline" size="sm" className="w-full xs:w-auto sm:w-auto" onClick={() => { window.location.href = 'mailto:SarahJohnsonStudIDSTU2024001@gmail.com'; }}>
                   <Mail className="mr-2 h-4 w-4" />
                   Email
                 </Button>
@@ -182,7 +182,7 @@ export default function StudentProfile() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
         {/* Personal Information */}
         <Card className="bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
           <CardHeader>
@@ -193,15 +193,15 @@ export default function StudentProfile() {
             <CardDescription>Your personal details and contact information</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {personalInfo.map((info, index) => (
-                <div key={info.label} className="flex items-center gap-4 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                <div key={info.label} className="flex items-center gap-3 sm:gap-4 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                   <div className="p-2 rounded-full bg-primary/10">
                     <info.icon className="h-4 w-4 text-primary" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-muted-foreground">{info.label}</p>
-                    <p className="font-medium">{info.value}</p>
+                    <p className="text-xs sm:text-sm font-medium text-muted-foreground">{info.label}</p>
+                    <p className="text-sm sm:text-base font-medium break-words">{info.value}</p>
                   </div>
                 </div>
               ))}
@@ -219,15 +219,15 @@ export default function StudentProfile() {
             <CardDescription>Your academic details and enrollment information</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {academicInfo.map((info, index) => (
-                <div key={info.label} className="flex items-center gap-4 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                <div key={info.label} className="flex items-center gap-3 sm:gap-4 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                   <div className="p-2 rounded-full bg-secondary/10">
                     <info.icon className="h-4 w-4 text-secondary" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-muted-foreground">{info.label}</p>
-                    <p className="font-medium">{info.value}</p>
+                    <p className="text-xs sm:text-sm font-medium text-muted-foreground">{info.label}</p>
+                    <p className="text-sm sm:text-base font-medium break-words">{info.value}</p>
                   </div>
                 </div>
               ))}
@@ -249,28 +249,30 @@ export default function StudentProfile() {
           
           {/* Guardian Profile Section */}
           <div className="mt-6 p-4 rounded-lg bg-muted/30 border border-accent/20">
-            <div className="flex items-center gap-4">
-              <div className="relative">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+              <div className="relative self-start">
                 <img
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
                   alt="Michael Johnson"
-                  className="w-20 h-20 rounded-full object-cover border-4 border-accent/20 shadow-lg"
+                  loading="lazy"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"; }}
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-accent/20 shadow-lg bg-muted"
                 />
                 <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
                   <Users className="h-3 w-3 text-white" />
                 </div>
               </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-foreground">Michael Johnson</h3>
-                <p className="text-sm text-muted-foreground">Primary Guardian</p>
-                <div className="flex items-center gap-4 mt-2">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-base sm:text-lg font-semibold text-foreground">Michael Johnson</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">Primary Guardian</p>
+                <div className="mt-2 grid grid-cols-1 xs:grid-cols-2 gap-2">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Phone className="h-4 w-4" />
-                    <span>+1 (555) 987-6543</span>
+                    <Phone className="h-4 w-4 shrink-0" />
+                    <span className="break-words">+1 (555) 987-6543</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Mail className="h-4 w-4" />
-                    <span>michael.johnson@email.com</span>
+                    <Mail className="h-4 w-4 shrink-0" />
+                    <span className="break-all">michael.johnson@email.com</span>
                   </div>
                 </div>
               </div>

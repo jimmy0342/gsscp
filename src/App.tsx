@@ -40,6 +40,10 @@ import ClassTeacherAIChat from "./components/class-teacher/ClassTeacherAIChat";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminAIChat from "./components/admin/AdminAIChat";
 import ContactUs from "./pages/ContactUs";
+import StudentMessages from "./pages/StudentMessages";
+import SubjectTeacherMessages from "./pages/SubjectTeacherMessages";
+import ClassTeacherMessages from "./pages/ClassTeacherMessages";
+import AdminMessages from "./pages/AdminMessages";
 
 const queryClient = new QueryClient();
 
@@ -74,6 +78,7 @@ const App = () => (
             <Route path="ai-chat" element={<AIChat />} />
             <Route path="notifications" element={<Notifications />} />
             <Route path="contact" element={<ContactUs />} />
+            <Route path="messages" element={<StudentMessages />} />
           </Route>
 
           {/* Math Teacher Routes */}
@@ -84,16 +89,19 @@ const App = () => (
           {/* Subject Teacher Routes */}
           <Route path="/subject-teacher" element={<SubjectTeacherLayout />}>
             <Route index element={<SubjectTeacherAIChat />} />
+            <Route path="messages" element={<SubjectTeacherMessages />} />
           </Route>
 
           {/* Class Teacher Routes */}
           <Route path="/class-teacher" element={<ClassTeacherLayout />}>
             <Route index element={<ClassTeacherAIChat />} />
+            <Route path="messages" element={<ClassTeacherMessages />} />
           </Route>
 
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminAIChat />} />
+            <Route path="messages" element={<AdminMessages />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

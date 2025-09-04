@@ -25,11 +25,11 @@ export default function AboutCollege() {
         {/* Top-right Contact button positioned relative to the section */}
         <div className="absolute top-4 right-4 z-10">
           <Link to="/contact">
-            <Button className="bg-white text-primary hover:bg-white/90">Contact Us</Button>
+            <Button className="bg-blue-600 text-white hover:bg-blue-700 px-6 py-3 rounded-lg shadow-lg">Contact Us</Button>
           </Link>
         </div>
         <div className="absolute inset-0 flex items-end">
-          <div className="max-w-6xl mx-auto w-full px-4 pb-10 relative">
+          <div className="max-w-6xl mx-auto w-full px-4 pb-10 pt-28 sm:pt-0 relative">
             <h1 className="text-4xl sm:text-5xl font-extrabold text-white">BLUE ESTATE SCHOOL</h1>
             <p className="text-white/90 mt-2 max-w-2xl">Where curiosity meets opportunity. Discover our story, mission and vibrant school life.</p>
             <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -251,30 +251,32 @@ export default function AboutCollege() {
 
       {/* Footer */}
       <footer className="bg-primary/95 text-white">
-        <div className="max-w-6xl mx-auto px-4 py-10 grid sm:grid-cols-3 gap-8">
-          <div>
-            <div className="text-2xl font-bold">MACLAY SCHOOL</div>
-            <p className="text-sm text-white/80 mt-2">A simple, powerful & elegant school management system.</p>
+        <div className="max-w-6xl mx-auto px-4 py-10 grid gap-8 sm:grid-cols-3">
+          <div className="text-center sm:text-left">
+            <div className="text-xl sm:text-2xl font-bold">AI-Powered Edu</div>
+            <p className="text-xs sm:text-sm text-white/80 mt-2">A simple, powerful & elegant school management system.</p>
           </div>
-          <div>
-            <div className="font-semibold">Company</div>
-            <ul className="mt-2 space-y-1 text-sm text-white/80">
-              <li>About</li>
-              <li>Contact</li>
-              <li>Careers</li>
-            </ul>
-          </div>
-          <div>
-            <div className="font-semibold">Categories</div>
-            <ul className="mt-2 space-y-1 text-sm text-white/80">
-              <li>Blog</li>
-              <li>News</li>
-              <li>Events</li>
-            </ul>
+          <div className="grid grid-cols-2 gap-8 sm:contents">
+            <div className="text-center sm:text-left">
+              <div className="font-semibold">Company</div>
+              <ul className="mt-2 space-y-1 text-xs sm:text-sm text-white/80">
+                <li>About</li>
+                <li>Contact</li>
+                <li>Careers</li>
+              </ul>
+            </div>
+            <div className="text-center sm:text-left">
+              <div className="font-semibold">Categories</div>
+              <ul className="mt-2 space-y-1 text-xs sm:text-sm text-white/80">
+                <li>Blog</li>
+                <li>News</li>
+                <li>Events</li>
+              </ul>
+            </div>
           </div>
         </div>
         <div className="border-t border-white/20">
-          <div className="max-w-6xl mx-auto px-4 py-4 text-xs text-white/70">© 2025 MACLAY SCHOOL. All rights reserved.</div>
+          <div className="max-w-6xl mx-auto px-4 py-4 text-center sm:text-left text-[11px] sm:text-xs text-white/70">© 2025 AI-Powered Edu. All rights reserved.</div>
         </div>
       </footer>
     </div>

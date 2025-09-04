@@ -11,6 +11,7 @@ import {
 
 const navigation = [
   { name: "AI Chat Assistant", href: "/class-teacher", icon: MessageSquare },
+  { name: "Student Messages", href: "/class-teacher/messages", icon: MessageSquare },
 ];
 
 export default function ClassTeacherLayout() {
@@ -22,16 +23,16 @@ export default function ClassTeacherLayout() {
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-black/20" onClick={() => setSidebarOpen(false)} />
-        <div className="fixed left-0 top-0 h-full w-64 bg-card shadow-elegant">
-          <div className="flex h-16 items-center justify-between px-4 border-b">
-            <span className="text-lg font-semibold bg-gradient-primary bg-clip-text text-transparent">
+        <div className="fixed left-0 top-0 h-full w-72 sm:w-64 bg-card shadow-elegant">
+          <div className="flex h-14 sm:h-16 items-center justify-between px-4 border-b">
+            <span className="text-base sm:text-lg font-semibold bg-gradient-primary bg-clip-text text-transparent">
               Class Teacher Panel
             </span>
             <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </Button>
           </div>
-          <nav className="mt-4 px-2">
+          <nav className="mt-4 px-3">
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
               return (
@@ -39,7 +40,7 @@ export default function ClassTeacherLayout() {
                   key={item.name}
                   to={item.href}
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 mb-1 text-sm font-medium transition-all duration-200 ${
+                  className={`flex items-center gap-3 rounded-lg px-3 py-3 mb-2 text-sm font-medium transition-all duration-200 ${
                     isActive
                       ? 'bg-primary text-primary-foreground shadow-primary'
                       : 'text-muted-foreground hover:bg-muted hover:text-foreground'
@@ -88,18 +89,18 @@ export default function ClassTeacherLayout() {
       <div className="lg:pl-64 flex flex-col flex-1">
         {/* Top bar */}
         <div className="sticky top-0 z-10 bg-card/80 backdrop-blur-sm border-b shadow-sm">
-          <div className="px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 items-center justify-between">
+          <div className="px-3 sm:px-4 lg:px-8">
+            <div className="flex h-14 sm:h-16 items-center justify-between">
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden"
+                className="lg:hidden h-10 w-10"
                 onClick={() => setSidebarOpen(true)}
               >
                 <Menu className="h-5 w-5" />
               </Button>
               <div className="flex items-center gap-4">
-                <div className="text-sm text-muted-foreground">
+                <div className="text-xs sm:text-sm text-muted-foreground">
                   Welcome, Class Teacher!
                 </div>
               </div>

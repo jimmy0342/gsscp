@@ -41,17 +41,17 @@ export default function Performance() {
   const presentPercentage = (attendanceData[0].value / totalAttendance) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-subtle p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-subtle p-4 sm:p-6 space-y-6">
       {/* Header */}
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+      <div className="text-center space-y-1 sm:space-y-2">
+        <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
           Academic Performance
         </h1>
-        <p className="text-muted-foreground">Track your academic progress and achievements</p>
+        <p className="text-sm sm:text-base text-muted-foreground">Track your academic progress and achievements</p>
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <Card className="bg-card/80 backdrop-blur-sm border shadow-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -110,7 +110,7 @@ export default function Performance() {
       </div>
 
       <Tabs defaultValue="subjects" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
           <TabsTrigger value="subjects">Subject Performance</TabsTrigger>
           <TabsTrigger value="attendance">Attendance</TabsTrigger>
           <TabsTrigger value="progress">Monthly Progress</TabsTrigger>
@@ -118,17 +118,17 @@ export default function Performance() {
         </TabsList>
 
         <TabsContent value="subjects" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <Card className="bg-card/80 backdrop-blur-sm border shadow-card">
               <CardHeader>
                 <CardTitle>Subject-wise Performance</CardTitle>
                 <CardDescription>Current semester marks</CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={240}>
                   <BarChart data={subjectMarks}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="subject" angle={-45} textAnchor="end" height={80} />
+                    <XAxis dataKey="subject" angle={-30} textAnchor="end" height={60} interval={0} tick={{ fontSize: 10 }} />
                     <YAxis />
                     <Tooltip />
                     <Bar dataKey="marks" fill="hsl(var(--primary))" />
@@ -142,16 +142,16 @@ export default function Performance() {
                 <CardTitle>Subject Details</CardTitle>
                 <CardDescription>Detailed breakdown of marks</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 sm:space-y-4">
                 {subjectMarks.map((subject) => (
                   <div key={subject.subject} className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">{subject.subject}</span>
+                      <span className="font-medium text-sm sm:text-base">{subject.subject}</span>
                       <Badge variant={subject.marks >= 90 ? "default" : subject.marks >= 80 ? "secondary" : "outline"}>
                         {subject.marks}/{subject.total}
                       </Badge>
                     </div>
-                    <Progress value={subject.marks} className="h-2" />
+                    <Progress value={subject.marks} className="h-1.5 sm:h-2" />
                   </div>
                 ))}
               </CardContent>
@@ -166,7 +166,7 @@ export default function Performance() {
               <CardDescription>Your attendance statistics</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={240}>
                 <PieChart>
                   <Pie
                     data={attendanceData}
@@ -196,7 +196,7 @@ export default function Performance() {
               <CardDescription>Your performance over the months</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={240}>
                 <LineChart data={monthlyProgress}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />

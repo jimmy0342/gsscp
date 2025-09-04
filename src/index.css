@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile-specific school name font size */
+@media (max-width: 640px) {
+  .text-4xl {
+    font-size: 1.25rem;
+    line-height: 2.5rem;
+  }
+}
+
 /* Educational Portfolio Design System - All colors MUST be HSL */
 
 @layer base {

@@ -13,31 +13,72 @@ export default function ContactUs() {
   const [email, setEmail] = useState<string>("");
   const [subject, setSubject] = useState<string>("");
   const [message, setMessage] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!name || !email || !subject || !message) {
       toast.error("Please fill all fields.");
       return;
     }
-    toast.success("Your message has been sent to the selected recipient.");
-    setSubject("");
-    setMessage("");
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Create message object
+      const newMessage = {
+        id: Date.now().toString(),
+        name,
+        email,
+        recipient: role,
+        subject,
+        message,
+        timestamp: new Date(),
+        status: 'sent' as const
+      };
+      
+      // Save message to localStorage
+      const existingMessages = JSON.parse(localStorage.getItem('studentMessages') || '[]');
+      const updatedMessages = [...existingMessages, newMessage];
+      localStorage.setItem('studentMessages', JSON.stringify(updatedMessages));
+      
+      // Simulate sending the message (replace with actual API call)
+      console.log("Sending message:", newMessage);
+      
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast.success("Your message has been sent to the selected recipient. You can view it in Student Messages.");
+      
+      // Clear form after successful submission
+      setName("");
+      setEmail("");
+      setSubject("");
+      setMessage("");
+      setRole("subject-teacher");
+    } catch (error) {
+      toast.error("Failed to send message. Please try again.");
+      console.error("Error sending message:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="p-6 space-y-6 animate-fade-in">
-      {/* Contact Us Button - Top Right Corner */}
-      <div className="fixed top-4 right-4 z-50">
-        <Button className="bg-blue-600 text-white hover:bg-blue-700 px-6 py-3 rounded-lg shadow-lg">
-          Contact Us
-        </Button>
-      </div>
       
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">Contact Us</h1>
         <p className="text-muted-foreground">Reach out to your Subject Teacher, Class Teacher, or Admin</p>
+        <div className="flex justify-center">
+          <Button variant="outline" asChild>
+            <a href="/messages">View Your Messages</a>
+          </Button>
+        </div>
       </div>
+
+
 
       <div className="max-w-3xl mx-auto grid md:grid-cols-3 gap-6">
         <Card className="md:col-span-2 shadow-card">
@@ -51,8 +92,21 @@ export default function ContactUs() {
           <CardContent>
             <form className="space-y-4" onSubmit={onSubmit}>
               <div className="grid md:grid-cols-2 gap-3">
-                <Input placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} />
-                <Input placeholder="Your Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Input 
+                  placeholder="Your Name" 
+                  value={name} 
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  autoComplete="name"
+                />
+                <Input 
+                  placeholder="Your Email" 
+                  type="email" 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                />
               </div>
 
               <div className="grid md:grid-cols-2 gap-3">
@@ -64,7 +118,12 @@ export default function ContactUs() {
                     <SelectItem value="admin">Admin</SelectItem>
                   </SelectContent>
                 </Select>
-                <Input placeholder="Subject" value={subject} onChange={(e) => setSubject(e.target.value)} />
+                <Input 
+                  placeholder="Subject" 
+                  value={subject} 
+                  onChange={(e) => setSubject(e.target.value)}
+                  required
+                />
               </div>
 
               <Textarea
@@ -72,11 +131,31 @@ export default function ContactUs() {
                 className="min-h-[140px] resize-y"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                required
               />
 
               <div className="flex items-center justify-end gap-3">
-                <Button type="button" variant="outline" onClick={() => { setSubject(""); setMessage(""); }}>Clear</Button>
-                <Button type="submit" className="px-6">Send Message</Button>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  disabled={isSubmitting}
+                  onClick={() => { 
+                    setName(""); 
+                    setEmail(""); 
+                    setSubject(""); 
+                    setMessage(""); 
+                    setRole("subject-teacher"); 
+                  }}
+                >
+                  Clear
+                </Button>
+                <Button 
+                  type="submit" 
+                  className="px-6" 
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Sending..." : "Send Message"}
+                </Button>
               </div>
             </form>
           </CardContent>
