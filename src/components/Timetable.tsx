@@ -578,19 +578,19 @@ const ClassDetailsDialog = ({
     <Dialog>
       <DialogTrigger asChild>
         <div className="cursor-pointer hover:scale-105 transition-transform">
-          <div className={`rounded-lg border p-3 h-full ${getSubjectColor(classData.type)}`}>
-            <div className="font-medium text-sm mb-1">
+          <div className={`rounded-lg border p-2 sm:p-3 h-full ${getSubjectColor(classData.type)} shadow-sm hover:shadow-md transition-shadow`}>
+            <div className="font-semibold text-xs sm:text-sm mb-1 text-center sm:text-left">
               {classData.subject}
             </div>
             {classData.teacher && (
               <>
-                <div className="flex items-center gap-1 text-xs mb-1">
+                <div className="flex items-center gap-1 text-xs mb-1 justify-center sm:justify-start">
                   <User className="h-3 w-3" />
-                  {classData.teacher}
+                  <span className="truncate">{classData.teacher}</span>
                 </div>
-                <div className="flex items-center gap-1 text-xs">
+                <div className="flex items-center gap-1 text-xs justify-center sm:justify-start">
                   <MapPin className="h-3 w-3" />
-                  {classData.room}
+                  <span className="truncate">{classData.room}</span>
                 </div>
               </>
             )}
@@ -1320,22 +1320,24 @@ export default function Timetable() {
       </div>
 
       {/* Interactive Timetable */}
-      <Card className="bg-card/80 backdrop-blur-sm border shadow-card overflow-hidden">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5" />
-            Weekly Schedule - Click Subjects for Chapter Details
+      <Card className="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 backdrop-blur-sm border shadow-card overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-blue-600/10 to-indigo-600/10 border-b">
+          <CardTitle className="flex items-center gap-2 text-blue-900">
+            <Clock className="h-5 w-5 text-blue-600" />
+            <span className="text-lg sm:text-xl">Weekly Schedule - Click Subjects for Chapter Details</span>
           </CardTitle>
-          <CardDescription>Interactive timetable with chapter information, topics, and page numbers for each day</CardDescription>
+          <CardDescription className="text-blue-700/80 text-sm sm:text-base">
+            Interactive timetable with chapter information, topics, and page numbers for each day
+          </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b bg-muted/30">
-                  <th className="text-left p-3 sm:p-4 font-medium min-w-[120px]">Time</th>
+                <tr className="border-b bg-gradient-to-r from-blue-100/50 to-indigo-100/50">
+                  <th className="text-left p-2 sm:p-4 font-semibold text-blue-900 text-xs sm:text-sm min-w-[100px] sm:min-w-[120px]">Time</th>
                   {weekDays.map((day) => (
-                    <th key={day} className="text-left p-3 sm:p-4 font-medium min-w-[160px] sm:min-w-[200px]">
+                    <th key={day} className="text-left p-2 sm:p-4 font-semibold text-blue-900 text-xs sm:text-sm min-w-[120px] sm:min-w-[160px]">
                       {day}
                     </th>
                   ))}
@@ -1343,8 +1345,8 @@ export default function Timetable() {
               </thead>
               <tbody>
                 {timeSlots.map((time, timeIndex) => (
-                  <tr key={time} className="border-b hover:bg-muted/20 transition-colors">
-                    <td className="p-3 sm:p-4 font-medium text-xs sm:text-sm bg-muted/10">
+                  <tr key={time} className="border-b hover:bg-blue-50/30 transition-colors">
+                    <td className="p-2 sm:p-4 font-semibold text-xs sm:text-sm bg-gradient-to-r from-blue-50/80 to-indigo-50/80 text-blue-800">
                       {time}
                     </td>
                     {weekDays.map((day) => {
@@ -1352,10 +1354,10 @@ export default function Timetable() {
                       const isBreak = classData.type === "break";
                       
                       return (
-                        <td key={`${day}-${timeIndex}`} className="p-2">
+                        <td key={`${day}-${timeIndex}`} className="p-1 sm:p-2">
                           {isBreak ? (
-                          <div className={`rounded-lg border p-3 h-full ${getSubjectColor(classData.type)}`}>
-                            <div className="font-medium text-xs sm:text-sm mb-1">
+                          <div className={`rounded-lg border p-2 sm:p-3 h-full ${getSubjectColor(classData.type)}`}>
+                            <div className="font-semibold text-xs sm:text-sm mb-1 text-center">
                               {classData.subject}
                             </div>
                                 </div>
@@ -1378,10 +1380,10 @@ export default function Timetable() {
       </Card>
 
       {/* Enhanced Legend */}
-      <Card className="bg-card/80 backdrop-blur-sm border shadow-card">
-        <CardHeader>
-          <CardTitle className="text-lg">Interactive Features</CardTitle>
-          <CardDescription>Click on any subject to view chapter information, topics, and page numbers</CardDescription>
+      <Card className="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 backdrop-blur-sm border shadow-card">
+        <CardHeader className="bg-gradient-to-r from-blue-600/10 to-indigo-600/10 border-b">
+          <CardTitle className="text-lg text-blue-900">Interactive Features</CardTitle>
+          <CardDescription className="text-blue-700/80">Click on any subject to view chapter information, topics, and page numbers</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

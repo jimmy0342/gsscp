@@ -116,7 +116,7 @@ export default function FeeCollection() {
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="bg-card/80 backdrop-blur-sm border shadow-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -184,29 +184,41 @@ export default function FeeCollection() {
           <CardDescription>Upcoming fee payments due</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {pendingPayments.map((payment, index) => (
-              <div key={index} className="flex items-center justify-between p-4 border rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-amber-500/10 rounded-lg">
-                    <CreditCard className="h-6 w-6 text-amber-600" />
+              <div key={index} className="flex flex-col p-4 border rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-2 bg-amber-500/10 rounded-lg">
+                    <CreditCard className="h-5 w-5 text-amber-600" />
                   </div>
-                  <div>
-                    <h4 className="font-medium">{payment.category}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {payment.month || payment.semester} • Due: {payment.dueDate}
-                    </p>
-                    <p className="text-xs text-amber-600">
-                      {payment.daysLeft} days remaining
+                  <div className="flex-1">
+                    <h4 className="font-medium text-sm">{payment.category}</h4>
+                    <p className="text-xs text-muted-foreground">
+                      {payment.month || payment.semester}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <p className="text-xl font-bold">${payment.amount}</p>
-                    <Badge variant="secondary">Pending</Badge>
+                
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Amount</span>
+                    <span className="text-lg font-bold">${payment.amount}</span>
                   </div>
-                  <Button className="ml-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Due Date</span>
+                    <span className="text-sm">{payment.dueDate}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Status</span>
+                    <Badge variant="secondary" className="text-xs">Pending</Badge>
+                  </div>
+                </div>
+                
+                <div className="pt-2 border-t">
+                  <p className="text-xs text-amber-600 mb-3 text-center">
+                    {payment.daysLeft} days remaining
+                  </p>
+                  <Button size="sm" className="w-full">
                     Pay Now
                   </Button>
                 </div>
