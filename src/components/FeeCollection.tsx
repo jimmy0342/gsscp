@@ -125,7 +125,7 @@ export default function FeeCollection() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Total Paid</p>
-                <p className="text-2xl font-bold">${totalStats.totalPaid}</p>
+                <p className="text-2xl font-bold">PKR {totalStats.totalPaid}</p>
               </div>
             </div>
           </CardContent>
@@ -139,7 +139,7 @@ export default function FeeCollection() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Pending</p>
-                <p className="text-2xl font-bold">${totalStats.totalPending}</p>
+                <p className="text-2xl font-bold">PKR {totalStats.totalPending}</p>
               </div>
             </div>
           </CardContent>
@@ -202,7 +202,7 @@ export default function FeeCollection() {
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Amount</span>
-                    <span className="text-lg font-bold">${payment.amount}</span>
+                    <span className="text-lg font-bold">PKR {payment.amount}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Due Date</span>
@@ -244,7 +244,7 @@ export default function FeeCollection() {
                     <p className="text-sm text-muted-foreground">{fee.dueDate}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-lg">${fee.amount}</p>
+                    <p className="font-bold text-lg">PKR {fee.amount}</p>
                   </div>
                 </div>
               ))}
@@ -275,7 +275,7 @@ export default function FeeCollection() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold">${payment.amount}</p>
+                    <p className="font-bold">PKR {payment.amount}</p>
                     <Badge variant={getStatusBadge(payment.status) as any}>
                       {payment.status}
                     </Badge>

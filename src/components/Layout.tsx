@@ -117,7 +117,7 @@ export default function Layout() {
               </Button>
               <div className="flex items-center gap-4">
                 <div className="text-xs sm:text-sm text-muted-foreground truncate max-w-[60vw] sm:max-w-none">
-                  Welcome back, Sarah Johnson!
+                  Welcome back, Afaq Khan!
                 </div>
               </div>
             </div>

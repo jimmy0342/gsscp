@@ -19,7 +19,7 @@ import {
 import studentProfile from "@/assets/student-profile.jpg";
 
 const studentData = {
-  fullName: "Sarah Johnson",
+  fullName: "Afaq Khan",
   studentId: "STU2024001",
   class: "10th Grade",
   section: "A",
@@ -28,11 +28,11 @@ const studentData = {
   dateOfBirth: "2006-03-15",
   gender: "Male",
   bloodGroup: "A+",
-  contactNumber: "+1 (555) 123-4567",
-  email: "sarah.johnson@school.edu",
+  contactNumber: "+92 370 9425104",
+  email: "afaqkhan.net@gmail.com",
   address: "123 Oak Street, Springfield, IL 62701",
-  guardianName: "Michael Johnson",
-  emergencyContact: "+1 (555) 987-6543",
+  guardianName: "Sabir Khan",
+  emergencyContact: "+92 370 9425104",
   enrollmentYear: "2025",
   admissionNumber: "ADM2020150",
   status: "Active"
@@ -168,11 +168,11 @@ export default function StudentProfile() {
                 Enrolled since {studentData.enrollmentYear} • Admission No. {studentData.admissionNumber}
               </p>
               <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                <Button variant="default" size="sm" className="w-full xs:w-auto sm:w-auto" onClick={() => { window.location.href = 'tel:+15559876543'; }}>
+                <Button variant="default" size="sm" className="w-full xs:w-auto sm:w-auto" onClick={() => { window.location.href = 'tel:+923709425104'; }}>
                   <Phone className="mr-2 h-4 w-4" />
                   Call
                 </Button>
-                <Button variant="outline" size="sm" className="w-full xs:w-auto sm:w-auto" onClick={() => { window.location.href = 'mailto:SarahJohnsonStudIDSTU2024001@gmail.com'; }}>
+                <Button variant="outline" size="sm" className="w-full xs:w-auto sm:w-auto" onClick={() => { window.location.href = 'mailto:afaqkhan.net@gmail.com'; }}>
                   <Mail className="mr-2 h-4 w-4" />
                   Email
                 </Button>
@@ -263,16 +263,16 @@ export default function StudentProfile() {
                 </div>
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-base sm:text-lg font-semibold text-foreground">Michael Johnson</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-foreground">Sabir Khan</h3>
                 <p className="text-xs sm:text-sm text-muted-foreground">Primary Guardian</p>
                 <div className="mt-2 grid grid-cols-1 xs:grid-cols-2 gap-2">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Phone className="h-4 w-4 shrink-0" />
-                    <span className="break-words">+1 (555) 987-6543</span>
+                    <span className="break-words">+92 370 9425104</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Mail className="h-4 w-4 shrink-0" />
-                    <span className="break-all">michael.johnson@email.com</span>
+                    <span className="break-all">sabirkhan@gmail.com</span>
                   </div>
                 </div>
               </div>

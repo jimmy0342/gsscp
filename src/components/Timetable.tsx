@@ -24,7 +24,7 @@ const timetableData = {
   Monday: [
          { 
        subject: "Mathematics", 
-       teacher: "Dr. Smith", 
+       teacher: "Dr. Ahmed Khan", 
        room: "101", 
        type: "theory",
        chapter: "Chapter 8: Applications of Calculus",
@@ -38,7 +38,7 @@ const timetableData = {
      },
          { 
        subject: "Physics", 
-       teacher: "Prof. Johnson", 
+       teacher: "Prof. Muhammad Ali", 
        room: "Lab-A", 
        type: "practical",
        chapter: "Chapter 5: Mechanics and Motion",
@@ -52,7 +52,7 @@ const timetableData = {
      },
          { 
        subject: "Chemistry", 
-       teacher: "Dr. Brown", 
+       teacher: "Dr. Fatima Sheikh", 
        room: "102", 
        type: "theory",
        chapter: "Chapter 12: Organic Chemistry",
@@ -67,7 +67,7 @@ const timetableData = {
     { subject: "BREAK", teacher: "", room: "", type: "break" },
     { 
       subject: "English", 
-      teacher: "Ms. Davis", 
+      teacher: "Ms. Ayesha Malik", 
       room: "103", 
       type: "theory",
       chapter: "Chapter 7: Shakespearean Literature",
@@ -80,7 +80,7 @@ const timetableData = {
     },
     { 
       subject: "Computer Science", 
-      teacher: "Mr. Wilson", 
+      teacher: "Mr. Hassan Raza", 
       room: "Lab-B", 
       type: "practical",
       chapter: "Chapter 9: Data Structures",
@@ -94,7 +94,7 @@ const timetableData = {
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
     { 
       subject: "Biology", 
-      teacher: "Dr. Lee", 
+      teacher: "Dr. Zainab Abbas", 
       room: "104", 
       type: "theory",
       chapter: "Chapter 6: Genetics and Inheritance",
@@ -107,7 +107,7 @@ const timetableData = {
     },
     { 
       subject: "Sports", 
-      teacher: "Coach Miller", 
+      teacher: "Coach Tariq Ahmed", 
       room: "Ground", 
       type: "activity",
       chapter: "Chapter 15: Team Sports",
@@ -122,7 +122,7 @@ const timetableData = {
   Tuesday: [
          { 
        subject: "Physics", 
-       teacher: "Prof. Johnson", 
+       teacher: "Prof. Muhammad Ali", 
        room: "105", 
        type: "theory",
        chapter: "Chapter 5: Electromagnetism",
@@ -136,7 +136,7 @@ const timetableData = {
      },
     { 
       subject: "Mathematics", 
-      teacher: "Dr. Smith", 
+      teacher: "Dr. Ahmed Khan", 
       room: "101", 
       type: "theory",
       chapter: "Chapter 8: Applications of Calculus",
@@ -149,7 +149,7 @@ const timetableData = {
     },
     { 
       subject: "English", 
-      teacher: "Ms. Davis", 
+      teacher: "Ms. Ayesha Malik", 
       room: "103", 
       type: "theory",
       chapter: "Chapter 7: Shakespearean Literature",
@@ -163,7 +163,7 @@ const timetableData = {
     { subject: "BREAK", teacher: "", room: "", type: "break" },
     { 
       subject: "Chemistry", 
-      teacher: "Dr. Brown", 
+      teacher: "Dr. Fatima Sheikh", 
       room: "Lab-A", 
       type: "practical",
       chapter: "Chapter 12: Organic Chemistry",
@@ -176,7 +176,7 @@ const timetableData = {
     },
     { 
       subject: "Biology", 
-      teacher: "Dr. Lee", 
+      teacher: "Dr. Zainab Abbas", 
       room: "104", 
       type: "theory",
       chapter: "Chapter 6: Genetics and Inheritance",
@@ -190,7 +190,7 @@ const timetableData = {
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
     { 
       subject: "Computer Science", 
-      teacher: "Mr. Wilson", 
+      teacher: "Mr. Hassan Raza", 
       room: "Lab-B", 
       type: "practical",
       chapter: "Chapter 9: Data Structures",
@@ -203,7 +203,7 @@ const timetableData = {
     },
     { 
       subject: "Library", 
-      teacher: "Librarian", 
+      teacher: "Ms. Farah Khan", 
       room: "Library", 
       type: "activity",
       chapter: "Chapter 18: Research and Information Skills",
@@ -218,7 +218,7 @@ const timetableData = {
   Wednesday: [
     { 
       subject: "Chemistry", 
-      teacher: "Dr. Brown", 
+      teacher: "Dr. Fatima Sheikh", 
       room: "102", 
       type: "theory",
       chapter: "Chapter 12: Organic Chemistry",
@@ -231,7 +231,7 @@ const timetableData = {
     },
     { 
       subject: "Biology", 
-      teacher: "Dr. Lee", 
+      teacher: "Dr. Zainab Abbas", 
       room: "104", 
       type: "theory",
       chapter: "Chapter 6: Genetics and Inheritance",
@@ -244,7 +244,7 @@ const timetableData = {
     },
     { 
       subject: "Mathematics", 
-      teacher: "Dr. Smith", 
+      teacher: "Dr. Ahmed Khan", 
       room: "101", 
       type: "theory",
       chapter: "Chapter 8: Applications of Calculus",
@@ -258,7 +258,7 @@ const timetableData = {
     { subject: "BREAK", teacher: "", room: "", type: "break" },
     { 
       subject: "Physics", 
-      teacher: "Prof. Johnson", 
+      teacher: "Prof. Muhammad Ali", 
       room: "Lab-A", 
       type: "practical",
       topics: "Waves: Sound Wave Properties",
@@ -269,7 +269,7 @@ const timetableData = {
     },
     { 
       subject: "English", 
-      teacher: "Ms. Davis", 
+      teacher: "Ms. Ayesha Malik", 
       room: "103", 
       type: "theory",
       topics: "Literature: Macbeth Act 3 Analysis",
@@ -281,7 +281,7 @@ const timetableData = {
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
     { 
       subject: "Computer Science", 
-      teacher: "Mr. Wilson", 
+      teacher: "Mr. Hassan Raza", 
       room: "106", 
       type: "theory",
       topics: "Database Design: ER Diagrams",
@@ -292,7 +292,7 @@ const timetableData = {
     },
     { 
       subject: "Art & Craft", 
-      teacher: "Ms. Taylor", 
+      teacher: "Ms. Saba Khan", 
       room: "Art Room", 
       type: "activity",
       topics: "Digital Art: Vector Graphics",
@@ -305,7 +305,7 @@ const timetableData = {
   Thursday: [
     { 
       subject: "English", 
-      teacher: "Ms. Davis", 
+      teacher: "Ms. Ayesha Malik", 
       room: "103", 
       type: "theory",
       topics: "Literature: Macbeth Final Discussion",
@@ -316,7 +316,7 @@ const timetableData = {
     },
     { 
       subject: "Mathematics", 
-      teacher: "Dr. Smith", 
+      teacher: "Dr. Ahmed Khan", 
       room: "101", 
       type: "theory",
       topics: "Calculus: Applications in Physics",
@@ -327,7 +327,7 @@ const timetableData = {
     },
     { 
       subject: "Physics", 
-      teacher: "Prof. Johnson", 
+      teacher: "Prof. Muhammad Ali", 
       room: "105", 
       type: "theory",
       topics: "Modern Physics: Quantum Mechanics",
@@ -339,7 +339,7 @@ const timetableData = {
     { subject: "BREAK", teacher: "", room: "", type: "break" },
     { 
       subject: "Biology", 
-      teacher: "Dr. Lee", 
+      teacher: "Dr. Zainab Abbas", 
       room: "Lab-C", 
       type: "practical",
       topics: "Microbiology: Bacterial Cultures",
@@ -350,7 +350,7 @@ const timetableData = {
     },
     { 
       subject: "Chemistry", 
-      teacher: "Dr. Brown", 
+      teacher: "Dr. Fatima Sheikh", 
       room: "102", 
       type: "theory",
       topics: "Inorganic Chemistry: Transition Metals",
@@ -362,7 +362,7 @@ const timetableData = {
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
     { 
       subject: "Computer Science", 
-      teacher: "Mr. Wilson", 
+      teacher: "Mr. Hassan Raza", 
       room: "Lab-B", 
       type: "practical",
       topics: "Web Development: HTML and CSS",
@@ -373,7 +373,7 @@ const timetableData = {
     },
     { 
       subject: "Music", 
-      teacher: "Ms. Garcia", 
+      teacher: "Ms. Nida Hussain", 
       room: "Music Room", 
       type: "activity",
       topics: "Music Theory: Chord Progressions",
@@ -386,7 +386,7 @@ const timetableData = {
   Friday: [
     { 
       subject: "Mathematics", 
-      teacher: "Dr. Smith", 
+      teacher: "Dr. Ahmed Khan", 
       room: "101", 
       type: "theory",
       topics: "Calculus: Series and Sequences",
@@ -397,7 +397,7 @@ const timetableData = {
     },
     { 
       subject: "Chemistry", 
-      teacher: "Dr. Brown", 
+      teacher: "Dr. Fatima Sheikh", 
       room: "102", 
       type: "theory",
       topics: "Physical Chemistry: Thermodynamics",
@@ -408,7 +408,7 @@ const timetableData = {
     },
     { 
       subject: "Biology", 
-      teacher: "Dr. Lee", 
+      teacher: "Dr. Zainab Abbas", 
       room: "104", 
       type: "theory",
       topics: "Ecology: Population Dynamics",
@@ -420,7 +420,7 @@ const timetableData = {
     { subject: "BREAK", teacher: "", room: "", type: "break" },
     { 
       subject: "Physics", 
-      teacher: "Prof. Johnson", 
+      teacher: "Prof. Muhammad Ali", 
       room: "105", 
       type: "theory",
       topics: "Optics: Light and Reflection",
@@ -431,7 +431,7 @@ const timetableData = {
     },
     { 
       subject: "English", 
-      teacher: "Ms. Davis", 
+      teacher: "Ms. Ayesha Malik", 
       room: "103", 
       type: "theory",
       topics: "Writing: Essay Structure and Style",
@@ -443,7 +443,7 @@ const timetableData = {
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
     { 
       subject: "Computer Science", 
-      teacher: "Mr. Wilson", 
+      teacher: "Mr. Hassan Raza", 
       room: "106", 
       type: "theory",
       topics: "Software Engineering: Design Patterns",
@@ -454,7 +454,7 @@ const timetableData = {
     },
     { 
       subject: "Assembly", 
-      teacher: "Principal", 
+      teacher: "Dr. Imran Sheikh", 
       room: "Auditorium", 
       type: "activity",
       topics: "School Announcements and Awards",
@@ -478,7 +478,7 @@ const timetableData = {
     },
     { 
       subject: "Mathematics", 
-      teacher: "Dr. Smith", 
+      teacher: "Dr. Ahmed Khan", 
       room: "101", 
       type: "theory",
       topics: "Calculus: Review and Practice",
@@ -489,7 +489,7 @@ const timetableData = {
     },
     { 
       subject: "Science Quiz", 
-      teacher: "Dr. Brown", 
+      teacher: "Dr. Fatima Sheikh", 
       room: "102", 
       type: "activity",
       topics: "Science Knowledge Competition",
@@ -501,7 +501,7 @@ const timetableData = {
     { subject: "BREAK", teacher: "", room: "", type: "break" },
     { 
       subject: "Sports", 
-      teacher: "Coach Miller", 
+      teacher: "Coach Tariq Ahmed", 
       room: "Ground", 
       type: "activity",
       topics: "Team Sports: Basketball Tournament",
@@ -524,7 +524,7 @@ const timetableData = {
     { subject: "LUNCH", teacher: "", room: "", type: "break" },
     { 
       subject: "Study Hall", 
-      teacher: "Class Teacher", 
+      teacher: "Ms. Ayesha Malik", 
       room: "103", 
       type: "study",
       topics: "Independent Study and Homework",

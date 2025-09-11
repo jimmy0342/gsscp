@@ -30,7 +30,7 @@ export default function AboutCollege() {
         </div>
         <div className="absolute inset-0 flex items-end">
           <div className="max-w-6xl mx-auto w-full px-4 pb-10 pt-28 sm:pt-0 relative">
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-white">BLUE ESTATE SCHOOL</h1>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-white">AI-Powered Education</h1>
             <p className="text-white/90 mt-2 max-w-2xl">Where curiosity meets opportunity. Discover our story, mission and vibrant school life.</p>
             <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
