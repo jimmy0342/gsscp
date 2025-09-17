@@ -30,7 +30,7 @@ const studentData = {
   bloodGroup: "A+",
   contactNumber: "+92 370 9425104",
   email: "afaqkhan.net@gmail.com",
-  address: "123 Oak Street, Springfield, IL 62701",
+  address: "Aslam Derry Pajagi Road Peshawar",
   guardianName: "Sabir Khan",
   emergencyContact: "+92 370 9425104",
   enrollmentYear: "2025",
