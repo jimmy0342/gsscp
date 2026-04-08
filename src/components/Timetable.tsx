@@ -906,7 +906,7 @@ export default function Timetable() {
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Class Timetable - 10-A Science</title>
+          <title>Class Timetable - 11-A Science</title>
           <meta charset="utf-8">
         </head>
         <body>
@@ -1012,7 +1012,7 @@ export default function Timetable() {
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Class Timetable - 10-A Science</title>
+          <title>Class Timetable - 11-A Science</title>
           <meta charset="utf-8">
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');

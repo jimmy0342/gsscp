@@ -21,7 +21,7 @@ import studentProfile from "@/assets/student-profile.jpg";
 const studentData = {
   fullName: "Afaq Khan",
   studentId: "STU2024001",
-  class: "10th Grade",
+  class: "11th Grade",
   section: "A",
   rollNumber: "15",
   profileImage: studentProfile,

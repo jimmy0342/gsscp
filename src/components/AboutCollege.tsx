@@ -3,10 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import campus from "@/assets/college-campus.jpg";
+import aboutCollegeHero from "@/assets/about-college-hero.png";
+import aboutCollegeGallery from "@/assets/about-college-gallery.png";
 import hero from "@/assets/hero-education.jpg";
 import student from "@/assets/student-profile.jpg";
 import introVideo from "@/assets/intro.mp4";
+import campus14 from "@/assets/reel/campus-14.png";
+import campus15 from "@/assets/reel/campus-15.png";
+import campus16 from "@/assets/reel/campus-16.png";
+import campus17 from "@/assets/reel/campus-17.png";
+import campus18 from "@/assets/reel/campus-18.png";
+import campus19 from "@/assets/reel/campus-19.png";
+import campus20 from "@/assets/reel/campus-20.png";
 
 const Stat = ({ label, value }: { label: string; value: string }) => (
   <div className="text-center">
@@ -16,11 +26,35 @@ const Stat = ({ label, value }: { label: string; value: string }) => (
 );
 
 export default function AboutCollege() {
+  const reelImages = [
+    campus14,
+    campus15,
+    campus16,
+    campus17,
+    campus18,
+    campus19,
+    campus20,
+  ];
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isReelPlaying, setIsReelPlaying] = useState(true);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (!isReelPlaying) return;
+
+    const imageDurationMs = 3500;
+    const interval = setInterval(() => {
+      setActiveImageIndex((prev) => (prev + 1) % reelImages.length);
+    }, imageDurationMs);
+
+    return () => clearInterval(interval);
+  }, [isReelPlaying, reelImages.length]);
+
   return (
     <div className="p-0">
       {/* Hero */}
       <section className="relative">
-        <img src={campus} alt="School" className="h-[340px] w-full object-cover" />
+        <img src={aboutCollegeHero} alt="Government Superior Science College campus" className="h-[460px] w-full object-cover object-bottom" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/60" />
         {/* Top-right Contact button positioned relative to the section */}
         <div className="absolute top-4 right-4 z-10">
@@ -30,13 +64,13 @@ export default function AboutCollege() {
         </div>
         <div className="absolute inset-0 flex items-end">
           <div className="max-w-6xl mx-auto w-full px-4 pb-10 pt-28 sm:pt-0 relative">
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-white">AI-Powered Education</h1>
-            <p className="text-white/90 mt-2 max-w-2xl">Where curiosity meets opportunity. Discover our story, mission and vibrant school life.</p>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-white">Government Superior Science College</h1>
+            <p className="text-white/90 mt-2 max-w-2xl">Advancing intermediate and pre-university science education through strong academics, practical labs, and career-focused guidance.</p>
             <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { l: "Students", v: "4806" },
-                { l: "Courses", v: "265" },
-                { l: "Teachers", v: "649" },
+                { l: "College Students", v: "4806" },
+                { l: "Faculties", v: "15" },
+                { l: "Faculty Members", v: "649" },
                 { l: "Awards", v: "310" }
               ].map((s) => (
                 <div key={s.l} className="rounded-lg bg-white/10 backdrop-blur p-4 text-white">
@@ -69,7 +103,7 @@ export default function AboutCollege() {
             <Button className="mt-6">Explore programs</Button>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            {[hero, student, campus, hero].map((src, i) => (
+            {[hero, student, aboutCollegeGallery, hero].map((src, i) => (
               <img key={i} src={src} className="h-40 w-full object-cover rounded-lg shadow-card" alt="highlight" />
             ))}
           </div>
@@ -113,18 +147,18 @@ export default function AboutCollege() {
       <section className="max-w-6xl mx-auto px-4 py-12">
         <div className="flex items-end justify-between">
           <div>
-            <h2 className="text-2xl font-bold">School Facilities</h2>
+            <h2 className="text-2xl font-bold">College Facilities</h2>
             <p className="text-sm text-muted-foreground mt-1">Modern resources crafted for focused learning</p>
           </div>
         </div>
         <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
           {[
-            { t: "Smart Classrooms" },
-            { t: "Central Library" },
-            { t: "Innovation Labs" },
-            { t: "Sports Complex" },
-            { t: "Student Housing" },
-            { t: "Health Center" }
+            { t: "Smart Classrooms", d: "Digital boards and interactive tools for modern teaching." },
+            { t: "Central Library", d: "A rich collection of academic books, journals, and references." },
+            { t: "Innovation Labs", d: "Hands-on lab spaces for science experiments and research practice." },
+            { t: "Sports Complex", d: "Indoor and outdoor facilities to support fitness and teamwork." },
+            { t: "Hostel Accommodation", d: "Safe, comfortable residence with study-friendly environment." },
+            { t: "Health Center", d: "On-campus first aid and basic medical support for students." }
           ].map((f) => (
             <Card key={f.t} className="border-dashed">
               <CardContent className="p-5">
@@ -132,7 +166,7 @@ export default function AboutCollege() {
                   <Sparkles className="h-5 w-5 text-primary" />
                 </div>
                 <div className="font-medium">{f.t}</div>
-                <p className="text-xs text-muted-foreground mt-1">Well‑equipped and student‑centric spaces.</p>
+                <p className="text-xs text-muted-foreground mt-1">{f.d}</p>
               </CardContent>
             </Card>
           ))}
@@ -144,25 +178,36 @@ export default function AboutCollege() {
         <div className="grid md:grid-cols-3 gap-6">
           <Card className="overflow-hidden md:col-span-2">
             <div className="relative pb-[56.25%] h-0">
-              <video
-                className="absolute inset-0 h-full w-full object-cover"
-                controls
-                preload="metadata"
-                poster={campus}
-              >
-                <source src={introVideo} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+              {reelImages.map((src, index) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt={`College campus moment ${index + 1}`}
+                  className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${index === activeImageIndex ? "opacity-100" : "opacity-0"}`}
+                />
+              ))}
             </div>
             <CardContent className="p-4">
-              <div className="font-semibold">School Life Reel</div>
-              <p className="text-sm text-muted-foreground">A quick glimpse of events, clubs and achievements.</p>
+              <div className="font-semibold">College Campus Reel</div>
+              <p className="text-sm text-muted-foreground">A quick glimpse of academic events, societies, and achievements.</p>
+              <audio
+                ref={audioRef}
+                src={introVideo}
+                controls
+                loop
+                onPlay={() => setIsReelPlaying(true)}
+                onPause={() => setIsReelPlaying(false)}
+                onLoadedMetadata={(e) => {
+                  e.currentTarget.volume = 0.35;
+                }}
+                className="mt-3 w-full"
+              />
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-2"><CardTitle className="text-base">Notice Board</CardTitle></CardHeader>
             <CardContent className="space-y-2">
-              {["New class schedule", "Exam forms due", "PTM: Friday"].map((t) => (
+              {["New lecture timetable", "Exam forms due", "Academic council briefing: Friday"].map((t) => (
                 <div key={t} className="rounded-md bg-muted px-3 py-2 text-sm flex items-center justify-between">
                   <span>{t}</span>
                   <Badge variant="secondary">View</Badge>
@@ -176,11 +221,11 @@ export default function AboutCollege() {
       {/* Testimonials */}
       <section className="max-w-6xl mx-auto px-4 py-12">
         <div className="text-center">
-          <h2 className="text-2xl font-bold">What Students Say</h2>
+          <h2 className="text-2xl font-bold">What Our College Students Say</h2>
           <p className="text-sm text-muted-foreground mt-1">Trusted by families and educators worldwide</p>
         </div>
         <div className="mt-6 grid md:grid-cols-2 gap-6">
-          {["Student 1", "Student 2"].map((name) => (
+          {["College Student 1", "College Student 2"].map((name) => (
             <Card key={name}>
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
@@ -254,7 +299,7 @@ export default function AboutCollege() {
         <div className="max-w-6xl mx-auto px-4 py-10 grid gap-8 sm:grid-cols-3">
           <div className="text-center sm:text-left">
             <div className="text-xl sm:text-2xl font-bold">AI-Powered Edu</div>
-            <p className="text-xs sm:text-sm text-white/80 mt-2">A simple, powerful & elegant school management system.</p>
+            <p className="text-xs sm:text-sm text-white/80 mt-2">A simple, powerful, and elegant college management system.</p>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:contents">
             <div className="text-center sm:text-left">

@@ -35,7 +35,7 @@ export default function ClassTeacherAIChatTracker() {
   {
     id: 1,
     teacher: "Ms. Johnson",
-    class: "Class 10-A",
+    class: "Class 11-A",
     time: "08:00 AM",
     model: "ChatGPT",
     prompt: "I have a student who is struggling with attendance and seems disengaged. What are some strategies to help re-engage them?",
@@ -71,7 +71,7 @@ export default function ClassTeacherAIChatTracker() {
   {
     id: 5,
     teacher: "Mr. Miller",
-    class: "Class 10-B",
+    class: "Class 11-B",
     time: "03:45 PM",
     model: "Gemini",
     prompt: "What are some ways to encourage parent involvement in their child's education?",

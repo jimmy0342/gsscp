@@ -20,14 +20,14 @@ import {
 const navigation = [
   { name: "Profile", href: "/profile", icon: User },
   { name: "About School", href: "/about", icon: GraduationCap },
-  { name: "Performance", href: "/performance", icon: BarChart3 },
   { name: "Timetable", href: "/timetable", icon: Calendar },
+  { name: "Attendence", href: "/attendance", icon: CalendarCheck },
   { name: "Notes", href: "/notes", icon: BookOpen },
-  { name: "Results", href: "/results", icon: Trophy },
-  { name: "Attendance", href: "/attendance", icon: CalendarCheck },
+  { name: "Result", href: "/results", icon: Trophy },
+  { name: "Performance", href: "/performance", icon: BarChart3 },
   { name: "Fee Collection", href: "/fee-collection", icon: CreditCard },
   { name: "AI Chat", href: "/ai-chat", icon: Brain },
-  { name: "Notifications", href: "/notifications", icon: Bell },
+  { name: "Notification", href: "/notifications", icon: Bell },
 ];
 
 export default function Layout() {
