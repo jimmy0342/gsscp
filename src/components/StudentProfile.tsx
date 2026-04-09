@@ -16,7 +16,7 @@ import {
   MessageSquare,
   AlertCircle
 } from "lucide-react";
-import studentProfile from "@/assets/student-profile.jpg";
+import studentProfile from "@/assets/student-profile-custom.png";
 
 const studentData = {
   fullName: "Afaq Khan",
@@ -142,7 +142,7 @@ export default function StudentProfile() {
               <img
                 src={studentData.profileImage}
                 alt={studentData.fullName}
-                className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover shadow-primary"
+                className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover object-center shadow-primary"
               />
               <Badge 
                 variant={studentData.status === "Active" ? "default" : "secondary"}
